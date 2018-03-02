@@ -1,0 +1,67 @@
+.m-menu{
+  padding-bottom: 20px;
+}
+
+.m-page{
+  padding-top: 20px;
+  text-align: center;
+}
+
+.s-fr{
+  float: right;
+}
+
+.s-max-width-10{
+  max-width: 800px;
+}
+
+/*照片墙查看*/
+.u-img-view-none .el-upload--picture-card{
+  display: none;
+}
+
+.g-main .el-input--mini .el-input__inner{
+  height: 32px;
+}
+.g-main .el-input-number--mini .el-input-number__increase,.g-main .el-input-number--mini .el-input-number__decrease{
+  width: 32px;
+  height: 30px;
+  line-height: 30px;
+}
+.g-main .el-form-item--mini .el-form-item__label{
+  line-height: 32px;
+}
+.g-main .el-cascader__label{
+  line-height: 32px;
+}
+.g-main .el-form-item__label{
+  font-size: 13px !important;
+}
+
+
+/*原子样式组*/
+.s-fl{
+  float: left !important;
+}
+.s-wd-33{
+  width: 33.333% !important;
+}
+.s-wd-50{
+  width: 50% !important;
+}
+.s-wd-100{
+  width: 100% !important;
+}
+.s-ov-au{
+  overflow: auto;
+}
+.s-ma-fl-15{
+  margin-left: 15px !important;
+}
+.s-pa-fr-15{
+  padding-right: 15px !important;
+}
+.s-ma-fl-140{
+  margin-left: 140px;
+}
+
