@@ -8,7 +8,7 @@
         <el-aside width="200px">
           <navs @navDataTransfer="getNavData"></navs>
         </el-aside>
-        <el-container direction="vertical">
+        <el-container direction="vertical" style="width: 1000px">
           <crumb :crumbs="crumb"></crumb>
           <div class="el-main">
             <div class="g-main">
