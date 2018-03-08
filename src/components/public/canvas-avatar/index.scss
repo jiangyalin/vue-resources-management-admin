@@ -1,0 +1,256 @@
+*{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.cae-bd{
+  margin: 0 auto;
+  padding: 40px 110px;
+  width: 642px;
+  height: 417px;
+  border: 1px solid #DDDDDD;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.cae-mn{
+  /*overflow: auto;*/
+  width: 100%;
+  height: 307px;
+}
+.cae-mnc{
+  overflow: hidden;
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border: 1px solid #DDDDDD;
+  background-color: #666;
+}
+.cae-vo{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+.cae-co{
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(0deg) scale(1);
+}
+.cae-co[caeActive='false']{
+  display: none;
+}
+.cae-img{
+  position: absolute;
+  display: block;
+}
+.cae-img-tp{
+  clip: rect(0px,50px,50px,0px);
+  z-index: 9;
+}
+.cae-img-bm{
+  z-index: 11;
+  opacity: 1;
+}
+.cae-active .cae-img-tp{
+  clip: rect(0px,50px,50px,0px);
+  z-index: 9;
+}
+.cae-active .cae-img-bm{
+  z-index: 1;
+  opacity: 0.3;
+}
+.cae-img-wi{
+  width: 100%;
+  height: auto;
+}
+.cae-img-he{
+  width: auto;
+  height: 100%;
+}
+.cae-mb{
+  position: relative;
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(0,0,0,0);
+  transform: translate(0px,0px);
+  cursor: move;
+}
+.cae-mb::after{
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  content: '';
+  width: 100%;
+  height: 100%;
+  border: 1px solid #fff;
+}
+.cae-tt{
+  width: 100%;
+  height: 40px;
+  font-size: 12px;
+  color: #4a4a4a;
+  line-height: 40px;
+  text-align: center;
+}
+.cae-fl{
+  float: left;
+  width: 182px;
+  height: auto;
+}
+.cae-fr{
+  float: right;
+  width: 182px;
+  height: auto;
+}
+.cae-lel{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-image: url(./image/sc_bg.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #e2e2e2;
+  cursor: pointer;
+}
+.cae-lel.cae-active{
+  background-image: none;
+  background-color: #666666;
+}
+.cae-cas{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+.cae-fle{
+  display: none;
+}
+.cae-btn-grp{
+  /*overflow: auto;*/
+  width: 100%;
+  height: 40px;
+}
+.cae-btn{
+  display: block;
+  margin-top: 10px;
+  width: 45%;
+  height: 30px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4a4a4a;
+  line-height: 30px;
+  text-align: center;
+  /*border: 1px solid #cbcbcb;*/
+  border-radius: 2px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.cae-btn:hover{
+  background-color: #e5e5e5;
+}
+.cae-btn-fl{
+  float: left;
+}
+.cae-btn-fr{
+  float: right;
+}
+.cae-sch{
+  position: relative;
+  margin-top: 15px;
+  width: 100%;
+  height: 10px;
+  border: 1px solid #dadada;
+  border-radius: 5px;
+  background-color: #fff;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.cae-sch::after{
+  position: absolute;
+  top: -2px;
+  left: -15px;
+  content: "-";
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 10px;
+}
+.cae-sch::before{
+  position: absolute;
+  top: -2px;
+  right: -18px;
+  content: "+";
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 10px;
+}
+.cae-sch-btn{
+  position: absolute;
+  top: -5px;
+  left: -8px;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #dadada;
+  border-radius: 50%;
+  background-color: #e6e6e6;
+  cursor: pointer;
+  transform: translate(0px,0px);
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.cae-tips{
+  width: 100%;
+  height: auto;
+  text-align: center;
+}
+.cae-tips .cae-sn{
+  display: block;
+  height: 24px;
+  font-size: 12px;
+  color: #4a4a4a;
+  line-height: 24px;
+}
+.cae-tips .cae-sn-tp{
+  display: block;
+  height: 24px;
+  font-size: 12px;
+  color: #b8b8b8;
+  line-height: 24px;
+}
+
+.cae-rte{
+  display: none;
+}
+.cae-ch{
+  display: none;
+}
+.cae-dld{
+  /*display: none;*/
+}
+.cae-active .cae-tt{
+  display: none;
+}
+.cae-active .cae-rte{
+  display: block;
+}
+.cae-active .cae-ch{
+  display: block;
+}
+.cae-active .cae-dld{
+  display: block;
+}
+
+

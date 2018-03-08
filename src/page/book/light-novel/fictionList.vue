@@ -25,7 +25,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination class="m-page" small layout="prev, pager, next" :total="formInline.total"></el-pagination>
+    <el-pagination class="m-page" small layout="prev, pager, next" :total="formInline.total" @current-change="toPage"></el-pagination>
   </div>
 </template>
 
@@ -168,6 +168,22 @@
             type: 'info',
             message: '已取消删除'
           })
+        })
+      },
+      // 分页
+      toPage (page) {
+        this.loading = true
+        this.formInline.currentPage = page
+        // 获取轻小说列表
+        const fictionList = GetFictionList(this)
+
+        fictionList.then((resolve) => {
+          const list = List(this, resolve)
+          this.tableData = list.tableData
+          this.formInline.total = list.total
+          this.loading = false
+        }).catch((reject) => {
+          window.publicFunction.error(reject, this)
         })
       }
     },

@@ -37,6 +37,9 @@
         <el-form-item class="s-wh-fl" label="文件" prop="files">
           <el-button @click="dialogFormVisible = true">{{ruleForm.files}}</el-button>
         </el-form-item>
+        <el-form-item class="s-wh-fl" label="封面">
+          <el-button @click="toggleShow">点击选择封面</el-button>
+        </el-form-item>
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -66,10 +69,27 @@
         <el-button size="mini" type="primary" @click="dialogFormVisible = false">确定</el-button>
       </div>
     </el-dialog>
+    <my-upload
+      field="img"
+      @crop-upload-success="cropUploadSuccess"
+      @crop-upload-fail="cropUploadFail"
+      v-model="core.show"
+      :width="300"
+      :height="400"
+      :url="core.action"
+      :params="core.params"
+      :headers="core.headers"
+      :noCircle="core.noCircle"
+      :noSquare="core.noSquare"
+      :noRotate="core.noRotate"
+      :withCredentials="core.withCredentials"
+      img-format="png"></my-upload>
+    <img :src="core.imgDataUrl">
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import myUpload from 'vue-image-crop-upload'
   // 获取国家信息
   const GetCountryAll = vue => {
     const country = new Promise((resolve, reject) => {
@@ -121,8 +141,25 @@
           author: '', // 作者
           illustrator: '', // 插画师
           files: '点击上传文件', // 文件
-          fileId: '' // 文件id
+          fileId: '', // 文件id
+          coverId: '' // 封面id
         },
+        core: {
+          action: window.config.upload + '/api/upload/img',
+          show: false,
+          params: {
+            token: '123456798',
+            name: 'avatar'
+          },
+          headers: {
+            smail: '*_~'
+          },
+          imgDataUrl: '', // the datebase64 url of created image
+          noCircle: false,
+          noSquare: false,
+          noRotate: false
+        },
+        imgCutData: '',
         rules: {
           bookName: [
             { required: true, message: '请输入书籍名称', trigger: 'blur' },
@@ -177,7 +214,15 @@
         loading: true
       }
     },
+    components: {
+      'my-upload': myUpload
+    },
     methods: {
+      imageuploaded (res) {
+        if (res.errcode === 0) {
+          this.core.src = res.data.src
+        }
+      },
       // 上传成功
       handleAvatarSuccess (res, file, fileList) {
         console.log('file', file)
@@ -197,14 +242,11 @@
         this.dialogImageUrl = file.url
         this.dialogVisible = true
       },
-      submitUpload () {
-
-      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.ruleForm.fileId !== '') {
-              // 添加渠道
+            if (this.ruleForm.fileId !== '' && this.ruleForm.coverId !== '') {
+              // 添加轻小说
               const Fiction = AddFiction(this)
 
               Fiction.then((resolve) => {
@@ -231,6 +273,20 @@
       },
       resetForm (formName) {
         this.$refs[formName].resetFields()
+      },
+      toggleShow () {
+        this.core.show = !this.core.show
+      },
+      // 封面上传成功
+      cropUploadSuccess (jsonData, field) {
+        console.log('-------- upload success --------')
+        this.ruleForm.coverId = jsonData.data.id
+      },
+      // 封面上传失败
+      cropUploadFail (status, field) {
+        console.log('上传失败')
+        console.log(status)
+        console.log('field: ' + field)
       }
     },
     created: function () {
