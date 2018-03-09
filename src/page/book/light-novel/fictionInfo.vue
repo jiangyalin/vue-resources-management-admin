@@ -8,6 +8,7 @@
     <p>文件：{{book.files}}</p>
     <p>封面：{{book.cover}}</p>
     <img :src="book.cover" style="display: block">
+    <p>简介：{{book.introduction}}</p>
     <returnBtn></returnBtn>
   </div>
 </template>
@@ -64,7 +65,8 @@
           author: '',
           illustrator: '',
           cover: '',
-          files: ''
+          files: '',
+          introduction: ''
         },
         loading: true
       }
@@ -96,7 +98,8 @@
             author: resolve[1].data.data.author,
             illustrator: resolve[1].data.data.illustrator,
             cover: window.config.upload + resolve[1].data.data.cover.path + resolve[1].data.data.cover.name,
-            files: window.config.upload + resolve[1].data.data.bookFile.path + resolve[1].data.data.bookFile.name
+            files: window.config.upload + resolve[1].data.data.bookFile.path + resolve[1].data.data.bookFile.name,
+            introduction: resolve[1].data.data.introduction
           }
           this.book = book
           this.loading = false

@@ -40,6 +40,9 @@
         <el-form-item class="s-wh-fl" label="封面">
           <el-button @click="toggleShow">{{ruleForm.coverBtn}}</el-button>
         </el-form-item>
+        <el-form-item class="s-wh-fl" label="简介" prop="introduction">
+          <el-input type="textarea" v-model="ruleForm.introduction"></el-input>
+        </el-form-item>
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -143,7 +146,8 @@
           filesBtn: '点击上传文件', // 文件
           fileId: '', // 文件id
           coverBtn: '点击上传封面', // 封面
-          coverId: '' // 封面id
+          coverId: '', // 封面id
+          introduction: '' // 简介
         },
         core: {
           action: window.config.upload + '/api/upload/img',
@@ -185,6 +189,11 @@
           ],
           fileId: [
             { required: true, message: '请上传文件', trigger: 'blur' }
+          ],
+          introduction: [
+            { required: false, message: '请输入简介', trigger: 'blur' },
+            { min: 1, max: 300, message: '长度在 1 到 300 个字符', trigger: 'blur' },
+            { pattern: /\S+/, message: '不能全为空格' }
           ]
         },
         fileList: [],
