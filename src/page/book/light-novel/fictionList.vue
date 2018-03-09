@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <el-table
-      v-loading="loading"
       :data="tableData"
       stripe
       border
@@ -16,10 +15,10 @@
         :key="item.key"
         :width="item.width"
         show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="140">
+      <el-table-column fixed="right" label="操作" width="170">
         <template slot-scope="scope">
           <a class="el-button el-button--text el-button--small" style="text-decoration: none" :href="scope.row.file" download="w3logo">下载</a>
-          <!--<el-button type="text" size="small" @click="view(scope)">查看</el-button>-->
+          <el-button type="text" size="small" @click="view(scope)">查看</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
           <el-button type="text" size="small" @click="remove(scope)">删除</el-button>
         </template>
@@ -39,7 +38,7 @@
         author: data.author,
         illustrator: data.illustrator,
         releaseTime: vue.$moment(data.releaseTime).format('YYYY-MM-DD HH:mm'),
-        file: window.config.server + data.file.path + data.file.name
+        file: window.config.server + data.bookFile.path + data.bookFile.name
       }
     })
     return {
@@ -126,12 +125,14 @@
       }
     },
     methods: {
-      // 编辑
+      view (row) {
+        const id = row.row.id
+        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionInfo/' + id)
+      },
       edit (row) {
         const id = row.row.id
         this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionEdit/' + id)
       },
-      // 删除
       remove (row) {
         const id = row.row.id
         this.$confirm('此操作将删除该轻小说, 是否继续?', '提示', {

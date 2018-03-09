@@ -14,6 +14,11 @@ const operateNav = (vue) => {
         name: 'fictionEdit',
         path: '/book/lightNovel/fictionList/fictionEdit/' + vue.$route.params.fictionId,
         index: '2-1-1'
+      }, {
+        text: '轻小说详情',
+        name: 'fictionInfo',
+        path: '/book/lightNovel/fictionList/fictionInfo/' + vue.$route.params.fictionId,
+        index: '2-1-2'
       }]
     }, {
       text: '添加轻小说',
@@ -40,6 +45,11 @@ const ownerNav = (vue) => {
         name: 'fictionEdit',
         path: '/book/lightNovel/fictionList/fictionEdit/' + vue.$route.params.fictionId,
         index: '2-1-1'
+      }, {
+        text: '轻小说详情',
+        name: 'fictionInfo',
+        path: '/book/lightNovel/fictionList/fictionInfo/' + vue.$route.params.fictionId,
+        index: '2-1-2'
       }]
     }, {
       text: '添加轻小说',

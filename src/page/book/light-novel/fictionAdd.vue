@@ -34,11 +34,11 @@
         <el-form-item class="s-wh-fl" label="插画师" prop="illustrator">
           <el-input v-model="ruleForm.illustrator"></el-input>
         </el-form-item>
-        <el-form-item class="s-wh-fl" label="文件" prop="files">
-          <el-button @click="dialogFormVisible = true">{{ruleForm.files}}</el-button>
+        <el-form-item class="s-wh-fl" label="文件" prop="fileId">
+          <el-button @click="dialogFormVisible = true">{{ruleForm.filesBtn}}</el-button>
         </el-form-item>
         <el-form-item class="s-wh-fl" label="封面">
-          <el-button @click="toggleShow">点击选择封面</el-button>
+          <el-button @click="toggleShow">{{ruleForm.coverBtn}}</el-button>
         </el-form-item>
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -140,8 +140,9 @@
           releaseTime: this.$moment(), // 发售时间
           author: '', // 作者
           illustrator: '', // 插画师
-          files: '点击上传文件', // 文件
+          filesBtn: '点击上传文件', // 文件
           fileId: '', // 文件id
+          coverBtn: '点击上传封面', // 封面
           coverId: '' // 封面id
         },
         core: {
@@ -182,7 +183,7 @@
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' },
             { pattern: /\S+/, message: '不能全为空格' }
           ],
-          files: [
+          fileId: [
             { required: true, message: '请上传文件', trigger: 'blur' }
           ]
         },
@@ -225,8 +226,8 @@
       },
       // 上传成功
       handleAvatarSuccess (res, file, fileList) {
-        console.log('file', file)
         this.ruleForm.fileId = file.response.data.id
+        this.ruleForm.filesBtn = file.response.data.id
       },
       // 上传失败
       handleError (err, file, fileList) {
@@ -279,8 +280,8 @@
       },
       // 封面上传成功
       cropUploadSuccess (jsonData, field) {
-        console.log('-------- upload success --------')
         this.ruleForm.coverId = jsonData.data.id
+        this.ruleForm.coverBtn = jsonData.data.id
       },
       // 封面上传失败
       cropUploadFail (status, field) {

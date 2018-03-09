@@ -1,6 +1,7 @@
 import fictionList from './../../../page/book/light-novel/fictionList.vue'
 import fictionAdd from './../../../page/book/light-novel/fictionAdd.vue'
 import fictionEdit from './../../../page/book/light-novel/fictionEdit.vue'
+import fictionInfo from './../../../page/book/light-novel/fictionInfo.vue'
 
 export default [
   {
@@ -23,5 +24,12 @@ export default [
       requireAuth: true
     },
     component: fictionEdit
+  },
+  {
+    path: 'lightNovel/fictionList/fictionInfo/:fictionId',
+    meta: {
+      requireAuth: true
+    },
+    component: fictionInfo
   }
 ]

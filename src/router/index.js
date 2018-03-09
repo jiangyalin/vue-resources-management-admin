@@ -4,7 +4,6 @@ import Router from 'vue-router'
 import login from './login'
 import error from './../components/error/404.vue'
 import platform from './platform' // 运营
-import operator from './operator' // 业主
 
 Vue.use(Router)
 const router = new Router({
@@ -17,11 +16,7 @@ const router = new Router({
   ]
 })
 
-const userType = VueCookie.get('userType') || '' // 用户类型
-const isOperateType = userType === '0' // 运营
-const isOwnerType = userType === '1' // 业主
-if (isOperateType) router.addRoutes(platform)
-if (isOwnerType) router.addRoutes(operator)
+router.addRoutes(platform)
 
 // 判断登陆权限
 router.beforeEach((to, from, next) => {

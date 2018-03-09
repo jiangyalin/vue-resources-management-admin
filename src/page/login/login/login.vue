@@ -50,7 +50,6 @@
 
 <script type="text/ecmascript-6">
   import platform from './../../../router/platform' // 运营
-  import operator from './../../../router/operator' // 业主
   // 用户登录
   const LoginAccount = vue => {
     const login = new Promise((resolve, reject) => {
@@ -160,11 +159,7 @@
                     if (type === 'owner') this.$cookie.set('userType', '1', 7)
 
                     window.setTimeout(() => {
-                      const userType = this.$cookie.get('userType') || '' // 用户类型
-                      const isOperateType = userType === '0' // 运营
-                      const isOwnerType = userType === '1' // 业主
-                      if (isOperateType) this.$router.addRoutes(platform)
-                      if (isOwnerType) this.$router.addRoutes(operator)
+                      this.$router.addRoutes(platform)
                       this.$router.push('/')
                     }, 1)
                   }

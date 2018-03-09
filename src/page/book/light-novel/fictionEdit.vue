@@ -34,12 +34,16 @@
         <el-form-item class="s-wh-fl" label="插画师" prop="illustrator">
           <el-input v-model="ruleForm.illustrator"></el-input>
         </el-form-item>
-        <el-form-item class="s-wh-fl" label="文件" prop="files">
-          <el-button @click="dialogFormVisible = true">{{ruleForm.files}}</el-button>
+        <el-form-item class="s-wh-fl" label="文件" prop="fileId">
+          <el-button @click="dialogFormVisible = true">{{ruleForm.filesBtn}}</el-button>
+        </el-form-item>
+        <el-form-item class="s-wh-fl" label="封面">
+          <el-button @click="toggleShow">{{ruleForm.coverBtn}}</el-button>
         </el-form-item>
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <returnBtn></returnBtn>
         </el-form-item>
       </el-form>
     </transition>
@@ -66,10 +70,28 @@
         <el-button size="mini" type="primary" @click="dialogFormVisible = false">确定</el-button>
       </div>
     </el-dialog>
+    <my-upload
+      field="img"
+      @crop-upload-success="cropUploadSuccess"
+      @crop-upload-fail="cropUploadFail"
+      v-model="core.show"
+      :width="300"
+      :height="400"
+      :url="core.action"
+      :params="core.params"
+      :headers="core.headers"
+      :noCircle="core.noCircle"
+      :noSquare="core.noSquare"
+      :noRotate="core.noRotate"
+      :withCredentials="core.withCredentials"
+      img-format="png"></my-upload>
+    <img :src="core.imgDataUrl">
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import myUpload from 'vue-image-crop-upload'
+  import returnBtn from './../../../components/public/returnBtn.vue'
   // 获取国家信息
   const GetCountryAll = vue => {
     const country = new Promise((resolve, reject) => {
@@ -144,8 +166,25 @@
           releaseTime: this.$moment(), // 发售时间
           author: '', // 作者
           illustrator: '', // 插画师
-          files: '点击上传文件', // 文件
-          fileId: '' // 文件id
+          filesBtn: '点击上传文件', // 文件
+          fileId: '', // 文件id
+          coverBtn: '点击上传封面', // 封面
+          coverId: '' // 封面id
+        },
+        core: {
+          action: window.config.upload + '/api/upload/img',
+          show: false,
+          params: {
+            token: '123456798',
+            name: 'avatar'
+          },
+          headers: {
+            smail: '*_~'
+          },
+          imgDataUrl: '', // the datebase64 url of created image
+          noCircle: false,
+          noSquare: false,
+          noRotate: false
         },
         rules: {
           bookName: [
@@ -169,7 +208,7 @@
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' },
             { pattern: /\S+/, message: '不能全为空格' }
           ],
-          files: [
+          fileId: [
             { required: true, message: '请上传文件', trigger: 'blur' }
           ]
         },
@@ -204,8 +243,8 @@
     methods: {
       // 上传成功
       handleAvatarSuccess (res, file, fileList) {
-        console.log('file', file)
         this.ruleForm.fileId = file.response.data.id
+        this.ruleForm.filesBtn = file.response.data.id
       },
       // 上传失败
       handleError (err, file, fileList) {
@@ -221,8 +260,19 @@
         this.dialogImageUrl = file.url
         this.dialogVisible = true
       },
-      submitUpload () {
-
+      toggleShow () {
+        this.core.show = !this.core.show
+      },
+      // 封面上传成功
+      cropUploadSuccess (jsonData, field) {
+        this.ruleForm.coverId = jsonData.data.id
+        this.ruleForm.coverBtn = jsonData.data.id
+      },
+      // 封面上传失败
+      cropUploadFail (status, field) {
+        console.log('上传失败')
+        console.log(status)
+        console.log('field: ' + field)
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
@@ -233,7 +283,7 @@
 
               Fiction.then((resolve) => {
                 if (resolve.data.code === '200') {
-                  this.$confirm('创建渠道成功', '提示', {
+                  this.$confirm('编辑轻小说成功', '提示', {
                     confirmButtonText: '确定',
                     showCancelButton: false,
                     type: 'success'
@@ -256,6 +306,10 @@
       resetForm (formName) {
         this.$refs[formName].resetFields()
       }
+    },
+    components: {
+      'my-upload': myUpload,
+      returnBtn: returnBtn
     },
     created: function () {
       // 获取所有国家
@@ -284,8 +338,10 @@
           releaseTime: resolve.data.data.releaseTime,
           author: resolve.data.data.author,
           illustrator: resolve.data.data.illustrator,
-          files: '点击上传文件',
-          fileId: resolve.data.data.file
+          filesBtn: resolve.data.data.bookFile._id,
+          fileId: resolve.data.data.bookFile,
+          coverBtn: resolve.data.data.cover._id,
+          coverId: resolve.data.data.cover
         }
         this.ruleForm = ruleForm
       }).catch((reject) => {
