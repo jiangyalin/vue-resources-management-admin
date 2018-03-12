@@ -15,8 +15,9 @@
         :key="item.key"
         :width="item.width"
         show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="130">
+      <el-table-column fixed="right" label="操作" width="170">
         <template slot-scope="scope">
+          <a class="el-button el-button--text el-button--small" style="text-decoration: none" :href="scope.row.file" download="w3logo">下载</a>
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
           <el-button type="text" size="small" @click="remove(scope)">删除</el-button>
@@ -34,11 +35,9 @@
       return {
         id: data._id,
         name: data.name,
-        nickname: data.nickname,
-        gender: data.gender,
-        phone: data.phone,
-        eMail: data.eMail,
-        birthDate: vue.$moment(data.birthDate).format('YYYY-MM-DD HH:mm')
+        type: data.type,
+        content: data.content,
+        img: data.img
       }
     })
     return {
@@ -46,12 +45,12 @@
       total: response.data.data.totalElements
     }
   }
-  // 获取轻小说列表
-  const GetUserList = vue => {
-    const user = new Promise((resolve, reject) => {
+  // 获取app列表
+  const GetAppList = vue => {
+    const app = new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
-        url: window.config.server + '/api/user/user',
+        url: window.config.server + '/api/yaoxiao/app',
         params: {
           pageNum: vue.formInline.currentPage - 1,
           pageSize: vue.formInline.pageSize
@@ -66,14 +65,14 @@
         reject(error)
       })
     })
-    return user
+    return app
   }
-  // 删除轻小说
-  const DeleteUser = (vue, id) => {
-    const user = new Promise((resolve, reject) => {
+  // 删除app
+  const DeleteApp = (vue, id) => {
+    const app = new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
-        url: window.config.server + '/api/user/user',
+        url: window.config.server + '/api/yaoxiao/app',
         params: {
           id
         },
@@ -87,10 +86,9 @@
         reject(error)
       })
     })
-    return user
+    return app
   }
   export default {
-    name: 'userList',
     data () {
       return {
         // 渲染筛选
@@ -98,41 +96,32 @@
         // 筛选值
         formInline: {
           total: 0,
-          pageSize: 10,
+          pageSize: 1,
           currentPage: 1
         },
         // 渲染表格
         tableTile: [{
           key: '0',
-          columnLabel: '姓名',
+          columnLabel: '名称',
           prop: 'name'
         }, {
           key: '1',
-          columnLabel: '昵称',
-          prop: 'nickname'
+          columnLabel: '类型',
+          prop: 'type'
         }, {
           key: '2',
-          columnLabel: '性别',
-          prop: 'gender'
+          columnLabel: '内容',
+          prop: 'content'
         }, {
           key: '3',
-          columnLabel: '手机',
-          prop: 'phone'
-        }, {
-          key: '4',
-          columnLabel: '电子邮箱',
-          prop: 'eMail'
-        }, {
-          key: '5',
-          columnLabel: '出生日期',
-          prop: 'birthDate'
+          columnLabel: '图片',
+          prop: 'img'
         }],
         // 列表数据
         tableData: [],
         loading: true
       }
     },
-    components: {},
     methods: {
       view (row) {
         const id = row.row.id
@@ -144,24 +133,24 @@
       },
       remove (row) {
         const id = row.row.id
-        this.$confirm('此操作将删除该用户, 是否继续?', '提示', {
+        this.$confirm('此操作将删除该轻小说, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const User = DeleteUser(this, id)
+          const App = DeleteApp(this, id)
 
-          User.then((resolve) => {
+          App.then((resolve) => {
             if (resolve.data.code === '200') {
               this.loading = true
               this.$message({
                 type: 'success',
                 message: '删除成功!'
               })
-              // 获取用户列表
-              const userList = GetUserList(this)
+              // 获取轻小说列表
+              const appList = GetAppList(this)
 
-              userList.then((resolve) => {
+              appList.then((resolve) => {
                 const list = List(this, resolve)
                 this.tableData = list.tableData
                 this.formInline.total = list.total
@@ -184,10 +173,10 @@
       toPage (page) {
         this.loading = true
         this.formInline.currentPage = page
-        // 获取用户列表
-        const userList = GetUserList(this)
+        // 获取轻小说列表
+        const appList = GetAppList(this)
 
-        userList.then((resolve) => {
+        appList.then((resolve) => {
           const list = List(this, resolve)
           this.tableData = list.tableData
           this.formInline.total = list.total
@@ -198,10 +187,10 @@
       }
     },
     created: function () {
-      // 获取用户列表
-      const userList = GetUserList(this)
+      // 获取轻小说列表
+      const appList = GetAppList(this)
 
-      userList.then((resolve) => {
+      appList.then((resolve) => {
         const list = List(this, resolve)
         this.tableData = list.tableData
         this.formInline.total = list.total
@@ -213,6 +202,6 @@
   }
 </script>
 
-<style scoped>
+<style>
 
 </style>

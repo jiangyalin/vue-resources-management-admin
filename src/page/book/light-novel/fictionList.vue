@@ -24,7 +24,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination class="m-page" small layout="prev, pager, next" :total="formInline.total" @current-change="toPage"></el-pagination>
+    <el-pagination class="m-page" small layout="prev, pager, next" :total="formInline.total" @current-change="toPage" :pageSize="formInline.pageSize"></el-pagination>
   </div>
 </template>
 

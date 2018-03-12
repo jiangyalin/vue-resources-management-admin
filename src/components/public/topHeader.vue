@@ -53,6 +53,11 @@
           name: 'user',
           path: '/user',
           index: '3'
+        }, {
+          text: '姚逍',
+          name: 'yaoxiao',
+          path: '/yaoxiao',
+          index: '4'
         }]
       }
     },
