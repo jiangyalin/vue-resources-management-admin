@@ -48,6 +48,11 @@
           name: 'book',
           path: '/book',
           index: '2'
+        }, {
+          text: '用户',
+          name: 'user',
+          path: '/user',
+          index: '3'
         }]
       }
     },

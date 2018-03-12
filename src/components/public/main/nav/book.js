@@ -33,7 +33,7 @@ const node = {
   text: '书籍',
   name: 'book',
   path: '/book/lightNovel',
-  index: '01'
+  index: '02'
 }
 
 export default {

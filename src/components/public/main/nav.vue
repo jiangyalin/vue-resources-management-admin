@@ -32,6 +32,7 @@
 <script type="text/ecmascript-6">
   import home from './nav/home'
   import book from './nav/book'
+  import user from './nav/user'
   // 初始化激活
   const InitActive = vue => {
     let active = ''
@@ -101,6 +102,7 @@
       let nav = {}
       if (this.$route.path.indexOf('home') !== -1) nav = home
       if (this.$route.path.indexOf('book') !== -1) nav = book
+      if (this.$route.path.indexOf('user') !== -1) nav = user
 
       this.navIndex = nav.node
 
@@ -117,6 +119,7 @@
         let nav = {}
         if (this.$route.path.indexOf('home') !== -1) nav = home
         if (this.$route.path.indexOf('book') !== -1) nav = book
+        if (this.$route.path.indexOf('user') !== -1) nav = user
 
         this.navIndex = nav.node
 
