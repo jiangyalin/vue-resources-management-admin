@@ -154,9 +154,6 @@
                 UserInfo.then((resolve) => {
                   if (resolve.data.code === '200') {
                     this.$cookie.set('userName', resolve.data.user.name, 7)
-                    let type = resolve.data.user.type
-                    if (type === 'operate') this.$cookie.set('userType', '0', 7)
-                    if (type === 'owner') this.$cookie.set('userType', '1', 7)
 
                     window.setTimeout(() => {
                       this.$router.addRoutes(platform)

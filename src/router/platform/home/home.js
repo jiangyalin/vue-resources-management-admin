@@ -1,11 +1,11 @@
-import forwardNewsList from './../../../page/home/forwardNews/forwardNewsList.vue'
+import home from './../../../page/home/home/home.vue'
 
 export default [
   {
-    path: 'forwardNews/forwardNewsList',
+    path: 'home/home',
     meta: {
       requireAuth: true
     },
-    component: forwardNewsList
+    component: home
   }
 ]

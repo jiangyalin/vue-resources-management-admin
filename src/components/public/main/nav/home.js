@@ -1,19 +1,4 @@
-const operateNav = (vue) => {
-  return [{
-    text: '推送',
-    name: 'forwardNews',
-    path: '/home/forwardNews',
-    index: '2',
-    node: [{
-      text: '推送消息列表',
-      name: 'forwardNewsList',
-      path: '/home/forwardNews/forwardNewsList',
-      index: '2-1'
-    }]
-  }]
-}
-
-const ownerNav = (vue) => {
+const data = (vue) => {
   return [{
     text: '首页',
     name: 'home',
@@ -28,7 +13,7 @@ const ownerNav = (vue) => {
   }]
 }
 
-const node1 = {
+const node = {
   text: '首页',
   name: 'home',
   path: '/home/home',
@@ -36,7 +21,6 @@ const node1 = {
 }
 
 export default {
-  operate: operateNav,
-  owner: ownerNav,
-  node1: node1
+  data: data,
+  node: node
 }

@@ -21,10 +21,9 @@ router.addRoutes(platform)
 // 判断登陆权限
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
-    const userType = VueCookie.get('userType') || '' // 用户类型
     const user = VueCookie.get('userName') || '' // 用户名
     // 判断登陆
-    if (user === '' || userType === '') {
+    if (user === '') {
       next({
         path: '/zh-cn/login/login/login'
       })

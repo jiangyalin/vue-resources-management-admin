@@ -4,15 +4,15 @@ import home from './home'
 let children = [
   {
     path: '',
-    redirect: 'forwardNews/forwardNewsList'
+    redirect: 'home/home'
   },
   {
     path: 'home',
-    redirect: 'forwardNews/forwardNewsList'
+    redirect: 'home/home'
   },
   {
-    path: 'forwardNews',
-    redirect: 'forwardNews/forwardNewsList'
+    path: 'home',
+    redirect: 'home/home'
   }
 ]
 

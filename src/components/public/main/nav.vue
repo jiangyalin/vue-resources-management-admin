@@ -31,9 +31,6 @@
 
 <script type="text/ecmascript-6">
   import home from './nav/home'
-  import operateCenter from './nav/operateCenter'
-  import financialCenter from './nav/financialCenter'
-  import systemManagement from './nav/systemManagement'
   import book from './nav/book'
   // 初始化激活
   const InitActive = vue => {
@@ -63,10 +60,7 @@
             index: result.index
           }
           crumb.push(node2)
-          if (result.node !== undefined) {
-            return crumbActive(result.node, path)
-          }
-          return false
+          if (result.node !== undefined) return crumbActive(result.node, path)
         }
         return false
       })
@@ -106,19 +100,11 @@
     created: function () {
       let nav = {}
       if (this.$route.path.indexOf('home') !== -1) nav = home
-      if (this.$route.path.indexOf('operateCenter') !== -1) nav = operateCenter
-      if (this.$route.path.indexOf('financialCenter') !== -1) nav = financialCenter
-      if (this.$route.path.indexOf('systemManagement') !== -1) nav = systemManagement
       if (this.$route.path.indexOf('book') !== -1) nav = book
 
-      this.navIndex = nav.node1
+      this.navIndex = nav.node
 
-      const operateNav = nav.operate(this)
-      const ownerNav = nav.owner(this)
-
-      // 判断用户类型
-      if (this.$cookie.get('userType') === '0') this.navData = operateNav
-      if (this.$cookie.get('userType') === '1') this.navData = ownerNav
+      this.navData = nav.data(this)
 
       // 初始化激活
       InitActive(this)
@@ -130,17 +116,11 @@
       $route: function () {
         let nav = {}
         if (this.$route.path.indexOf('home') !== -1) nav = home
-        if (this.$route.path.indexOf('operateCenter') !== -1) nav = operateCenter
-        if (this.$route.path.indexOf('financialCenter') !== -1) nav = financialCenter
-        if (this.$route.path.indexOf('systemManagement') !== -1) nav = systemManagement
         if (this.$route.path.indexOf('book') !== -1) nav = book
 
-        const operateNav = nav.operate(this)
-        const ownerNav = nav.owner(this)
+        this.navIndex = nav.node
 
-        // 判断用户类型
-        if (this.$cookie.get('userType') === '0') this.navData = operateNav
-        if (this.$cookie.get('userType') === '1') this.navData = ownerNav
+        this.navData = nav.data(this)
 
         // 初始化激活
         InitActive(this)
