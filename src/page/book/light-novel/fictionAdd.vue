@@ -289,6 +289,7 @@
       },
       // 封面上传成功
       cropUploadSuccess (jsonData, field) {
+        console.log('上传成功')
         this.ruleForm.coverId = jsonData.data.id
         this.ruleForm.coverBtn = jsonData.data.id
       },

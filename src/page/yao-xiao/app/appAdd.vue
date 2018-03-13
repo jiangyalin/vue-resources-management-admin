@@ -49,7 +49,7 @@
           slot="trigger"
           size="small"
           type="primary">选取文件</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传txt文件，且不超过50M</div>
+        <div slot="tip" class="el-upload__tip">只能上传png,jpg,jpeg,gif文件，且不超过50M</div>
       </el-upload>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="dialogFormVisible = false">取消</el-button>
@@ -111,7 +111,7 @@
           content: '', // 内容
           img: '' // 图片
         },
-        imgBtn: '点击上传用户头像',
+        imgBtn: '点击上传app图片',
         rules: {
           name: [
             { required: true, message: '请输入姓名', trigger: 'blur' },
