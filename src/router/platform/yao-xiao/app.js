@@ -1,5 +1,6 @@
 import appList from './../../../page/yao-xiao/app/appList.vue'
-import userAdd from './../../../page/user/user/userAdd.vue'
+import appAdd from './../../../page/yao-xiao/app/appAdd.vue'
+import appInfo from './../../../page/yao-xiao/app/appInfo.vue'
 
 export default [
   {
@@ -10,10 +11,17 @@ export default [
     component: appList
   },
   {
-    path: 'user/userAdd',
+    path: 'app/appList/appInfo/:appId',
     meta: {
       requireAuth: true
     },
-    component: userAdd
+    component: appInfo
+  },
+  {
+    path: 'app/appAdd',
+    meta: {
+      requireAuth: true
+    },
+    component: appAdd
   }
 ]

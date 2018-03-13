@@ -15,9 +15,8 @@
         :key="item.key"
         :width="item.width"
         show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="170">
+      <el-table-column fixed="right" label="操作" width="140">
         <template slot-scope="scope">
-          <a class="el-button el-button--text el-button--small" style="text-decoration: none" :href="scope.row.file" download="w3logo">下载</a>
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
           <el-button type="text" size="small" @click="remove(scope)">删除</el-button>
@@ -37,7 +36,7 @@
         name: data.name,
         type: data.type,
         content: data.content,
-        img: data.img
+        img: window.config.server + data.img.path + data.img.name
       }
     })
     return {
@@ -96,7 +95,7 @@
         // 筛选值
         formInline: {
           total: 0,
-          pageSize: 1,
+          pageSize: 10,
           currentPage: 1
         },
         // 渲染表格
@@ -125,15 +124,15 @@
     methods: {
       view (row) {
         const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionInfo/' + id)
+        this.$router.push('/' + this.$route.params.lang + '/yaoxiao/app/appList/appInfo/' + id)
       },
       edit (row) {
-        const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionEdit/' + id)
+//        const id = row.row.id
+//        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionEdit/' + id)
       },
       remove (row) {
         const id = row.row.id
-        this.$confirm('此操作将删除该轻小说, 是否继续?', '提示', {
+        this.$confirm('此操作将删除该app, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -173,7 +172,7 @@
       toPage (page) {
         this.loading = true
         this.formInline.currentPage = page
-        // 获取轻小说列表
+        // 获取app列表
         const appList = GetAppList(this)
 
         appList.then((resolve) => {
@@ -187,7 +186,7 @@
       }
     },
     created: function () {
-      // 获取轻小说列表
+      // 获取app列表
       const appList = GetAppList(this)
 
       appList.then((resolve) => {
