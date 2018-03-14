@@ -31,11 +31,15 @@
   const List = (vue, response) => {
     let tableData = []
     tableData = response.data.data.content.map((data) => {
+      let gender = ''
+      vue.genderOptions.forEach(genderOptions => {
+        if (genderOptions.value === data.gender) gender = genderOptions.label
+      })
       return {
         id: data._id,
         name: data.name,
         nickname: data.nickname,
-        gender: data.gender,
+        gender: gender,
         phone: data.phone,
         eMail: data.eMail,
         birthDate: vue.$moment(data.birthDate).format('YYYY-MM-DD HH:mm')
@@ -46,7 +50,7 @@
       total: response.data.data.totalElements
     }
   }
-  // 获取轻小说列表
+  // 获取用户列表
   const GetUserList = vue => {
     const user = new Promise((resolve, reject) => {
       vue.$http({
@@ -68,7 +72,7 @@
     })
     return user
   }
-  // 删除轻小说
+  // 删除用户
   const DeleteUser = (vue, id) => {
     const user = new Promise((resolve, reject) => {
       vue.$http({
@@ -129,6 +133,16 @@
         }],
         // 列表数据
         tableData: [],
+        genderOptions: [{
+          value: '0',
+          label: '保密'
+        }, {
+          value: '1',
+          label: '男'
+        }, {
+          value: '2',
+          label: '女'
+        }],
         loading: true
       }
     },
@@ -136,11 +150,11 @@
     methods: {
       view (row) {
         const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionInfo/' + id)
+        this.$router.push('/' + this.$route.params.lang + '/user/user/userList/userInfo/' + id)
       },
       edit (row) {
         const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionEdit/' + id)
+        this.$router.push('/' + this.$route.params.lang + '/user/user/userList/userEdit/' + id)
       },
       remove (row) {
         const id = row.row.id

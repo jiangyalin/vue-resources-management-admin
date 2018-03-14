@@ -8,7 +8,18 @@ const data = (vue) => {
       text: '用户列表',
       name: 'userList',
       path: '/user/user/userList',
-      index: '3-1'
+      index: '3-1',
+      node: [{
+        text: '编辑用户',
+        name: 'userEdit',
+        path: '/user/user/userList/userEdit/' + vue.$route.params.userId,
+        index: '3-1-1'
+      }, {
+        text: '用户详情',
+        name: 'userInfo',
+        path: '/user/user/userList/userInfo/' + vue.$route.params.userId,
+        index: '3-1-2'
+      }]
     }, {
       text: '添加用户',
       name: 'userAdd',

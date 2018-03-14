@@ -40,6 +40,7 @@
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <returnBtn></returnBtn>
         </el-form-item>
       </el-form>
     </transition>
@@ -55,12 +56,34 @@
 
 <script type="text/ecmascript-6">
   import CanvasAvatar from './../../../components/public/canvas-avatar/index.vue'
-  // 添加用户
-  const AddUser = vue => {
+  import returnBtn from './../../../components/public/returnBtn.vue'
+  // 获取用户详情
+  const GetUser = vue => {
+    const user = new Promise((resolve, reject) => {
+      vue.$http({
+        method: 'get',
+        url: window.config.server + '/api/user/userInfo',
+        params: {
+          id: vue.$route.params.userId
+        },
+        headers: {
+          'languageCode': vue.$route.params.lang,
+          'Authorization': 'Bearer ' + vue.$cookie.get('token')
+        }
+      }).then((response) => {
+        resolve(response)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+    return user
+  }
+  // 编辑用户
+  const EditUser = vue => {
     const user = new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
-        url: window.config.server + '/api/user/user',
+        url: window.config.server + '/api/user/userInfo',
         data: vue.ruleForm,
         headers: {
           'languageCode': vue.$route.params.lang,
@@ -96,10 +119,11 @@
     return avatar
   }
   export default {
-    name: 'userAdd',
+    name: 'userEdit',
     data () {
       return {
         ruleForm: {
+          id: this.$route.params.userId,
           name: '', // 姓名
           nickname: '', // 昵称
           gender: '0', // 性别
@@ -150,27 +174,18 @@
       }
     },
     components: {
-      canvasAvatar: CanvasAvatar
+      canvasAvatar: CanvasAvatar,
+      returnBtn: returnBtn
     },
     methods: {
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.ruleForm.avatar === '') {
-              this.ruleForm = {
-                name: this.ruleForm.name, // 姓名
-                nickname: this.ruleForm.nickname, // 昵称
-                gender: this.ruleForm.gender, // 性别
-                phone: this.ruleForm.phone, // 手机
-                eMail: this.ruleForm.eMail, // 电子邮箱
-                birthDate: this.$moment() // 出生日期
-              }
-            }
-            const User = AddUser(this)
+            const User = EditUser(this)
 
             User.then((resolve) => {
               if (resolve.data.code === '200') {
-                this.$confirm('添加用户成功', '提示', {
+                this.$confirm('编辑用户成功', '提示', {
                   confirmButtonText: '确定',
                   showCancelButton: false,
                   type: 'success'
@@ -214,6 +229,29 @@
           window.publicFunction.error(reject, this)
         })
       }
+    },
+    created: function () {
+      // 获取用户详细信息
+      const User = GetUser(this)
+
+      User.then((resolve) => {
+        const avatar = resolve.data.data.avatar !== undefined ? resolve.data.data.avatar._id : ''
+        const user = {
+          id: resolve.data.data._id,
+          name: resolve.data.data.name || '', // 姓名
+          nickname: resolve.data.data.nickname || '', // 昵称
+          gender: resolve.data.data.gender || '', // 性别
+          phone: resolve.data.data.phone || '', // 手机
+          eMail: resolve.data.data.eMail || '', // 电子邮箱
+          avatar: avatar, // 头像
+          birthDate: resolve.data.data.birthDate || '' // 出生日期
+        }
+        if (avatar !== '') this.avatarBtn = avatar
+        this.ruleForm = user
+        this.loading = false
+      }).catch((reject) => {
+        window.publicFunction.error(reject, this)
+      })
     }
   }
 </script>
