@@ -26,6 +26,22 @@ const data = (vue) => {
       path: '/user/user/userAdd',
       index: '3-2'
     }]
+  }, {
+    text: '账户',
+    name: 'account',
+    path: '/user/account',
+    index: '4',
+    node: [{
+      text: '账户列表',
+      name: 'accountList',
+      path: '/user/account/accountList',
+      index: '4-1'
+    }, {
+      text: '添加账户',
+      name: 'accountAdd',
+      path: '/user/account/accountAdd',
+      index: '4-2'
+    }]
   }]
 }
 
