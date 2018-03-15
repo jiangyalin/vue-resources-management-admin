@@ -71,27 +71,6 @@
     })
     return login
   }
-  // 获取用户详细信息
-  const GetUserInfo = vue => {
-    const userInfo = new Promise((resolve, reject) => {
-      vue.$http({
-        method: 'get',
-        url: window.config.server + '/api/me',
-        params: {
-          id: vue.$cookie.get('userId')
-        },
-        headers: {
-          'languageCode': vue.$route.params.lang,
-          'Authorization': 'Bearer ' + vue.$cookie.get('token')
-        }
-      }).then((response) => {
-        resolve(response)
-      }).catch((error) => {
-        reject(error)
-      })
-    })
-    return userInfo
-  }
   export default {
     name: '',
     data () {
@@ -146,23 +125,14 @@
 
             Login.then((resolve) => {
               if (resolve.data.code === '200') {
-                this.$cookie.set('userId', resolve.data.user.id, 7)
+                this.$cookie.set('userId', resolve.data.data.user._id, 7)
+                this.$cookie.set('userName', resolve.data.data.user.nickname, 7)
+                this.$cookie.set('token', resolve.data.data.token, 7)
 
-                // 获取用户信息
-                const UserInfo = GetUserInfo(this)
-
-                UserInfo.then((resolve) => {
-                  if (resolve.data.code === '200') {
-                    this.$cookie.set('userName', resolve.data.user.name, 7)
-
-                    window.setTimeout(() => {
-                      this.$router.addRoutes(platform)
-                      this.$router.push('/')
-                    }, 1)
-                  }
-                }).catch((reject) => {
-                  window.publicFunction.error(reject, this)
-                })
+                window.setTimeout(() => {
+                  this.$router.addRoutes(platform)
+                  this.$router.push('/')
+                }, 1)
               } else {
                 this.$message({
                   type: 'error',

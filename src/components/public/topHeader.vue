@@ -83,14 +83,12 @@
           type: 'warning'
         }).then(() => {
           this.$cookie.delete('userId')
-          this.$cookie.delete('userType')
           this.$cookie.delete('userName')
           this.$router.push('/' + this.$route.params.lang + '/login')
-//          this.$message({
-//            type: 'success',
-//            message: '退出登录成功!'
-//          })
-          window.document.location.reload()
+          this.$message({
+            type: 'success',
+            message: '退出登录成功!'
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
