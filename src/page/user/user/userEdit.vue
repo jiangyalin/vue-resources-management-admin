@@ -181,6 +181,17 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            if (this.ruleForm.avatar === '') {
+              this.ruleForm = {
+                id: this.ruleForm.id,
+                name: this.ruleForm.name, // 姓名
+                nickname: this.ruleForm.nickname, // 昵称
+                gender: this.ruleForm.gender, // 性别
+                phone: this.ruleForm.phone, // 手机
+                eMail: this.ruleForm.eMail, // 电子邮箱
+                birthDate: this.$moment() // 出生日期
+              }
+            }
             const User = EditUser(this)
 
             User.then((resolve) => {

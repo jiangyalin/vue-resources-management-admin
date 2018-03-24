@@ -14,6 +14,7 @@ import publicFunction from './public'
 import moment from 'moment'
 import fullCalendar from 'vue-fullcalendar'
 import VueSession from 'vue-session'
+import NzhCn from 'nzh/cn' // 数字转中文
 
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
@@ -26,10 +27,12 @@ Vue.use(VueCookie)
 Vue.use(VueSession)
 Vue.use(ElementUI)
 Object.defineProperty(Vue.prototype, '$moment', { value: moment })
+Object.defineProperty(Vue.prototype, '$NzhCn', { value: NzhCn })
 
 Object.keys(locales).forEach(function (lang) {
   Vue.locale(lang, locales[lang])
 })
+
 window.moment = moment
 
 window.config = config

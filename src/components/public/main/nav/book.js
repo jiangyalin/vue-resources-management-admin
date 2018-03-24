@@ -19,12 +19,54 @@ const data = (vue) => {
         name: 'fictionInfo',
         path: '/book/lightNovel/fictionList/fictionInfo/' + vue.$route.params.fictionId,
         index: '2-1-2'
+      }, {
+        text: '卷列表',
+        name: 'volumeList',
+        path: '/book/lightNovel/fictionList/volumeList/' + vue.$route.params.fictionId,
+        index: '2-1-3',
+        node: [{
+          text: '卷详情',
+          name: 'volumeInfo',
+          path: '/book/lightNovel/fictionList/volumeList/' + vue.$route.params.fictionId + '/volumeInfo/' + vue.$route.params.volumeId,
+          index: '2-1-3-1'
+        }, {
+          text: '编辑卷',
+          name: 'volumeEdit',
+          path: '/book/lightNovel/fictionList/volumeList/' + vue.$route.params.fictionId + '/volumeEdit/' + vue.$route.params.volumeId,
+          index: '2-1-3-2'
+        }, {
+          text: '章列表',
+          name: 'chapterList',
+          path: '/book/lightNovel/fictionList/volumeList/' + vue.$route.params.fictionId + '/chapterList/' + vue.$route.params.volumeId,
+          index: '2-1-3-3',
+          node: [{
+            text: '章详情',
+            name: 'chapterInfo',
+            path: '/book/lightNovel/fictionList/volumeList/' + vue.$route.params.fictionId + '/chapterList/' + vue.$route.params.volumeId + '/chapterInfo/' + vue.$route.params.chapterId,
+            index: '2-1-3-3-1'
+          }, {
+            text: '编辑章',
+            name: 'chapterEdit',
+            path: '/book/lightNovel/fictionList/volumeList/' + vue.$route.params.fictionId + '/chapterList/' + vue.$route.params.volumeId + '/chapterEdit/' + vue.$route.params.chapterId,
+            index: '2-1-3-3-2'
+          }]
+        }]
       }]
     }, {
       text: '添加轻小说',
       name: 'fictionAdd',
       path: '/book/lightNovel/fictionAdd',
       index: '2-2'
+    }, {
+      text: '添加卷',
+      name: 'volumeAdd',
+      path: '/book/lightNovel/volumeAdd',
+      index: '2-3'
+    }, {
+      text: '添加章',
+      name: 'chapterAdd',
+      path: '/book/lightNovel/chapterAdd',
+      index: '2-4'
     }]
   }]
 }

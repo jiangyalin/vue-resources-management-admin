@@ -19,7 +19,7 @@
         <template slot-scope="scope">
           <a class="el-button el-button--text el-button--small" style="text-decoration: none" :href="scope.row.file" download="w3logo">下载</a>
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
-          <el-button type="text" size="small" @click="volume(scope)">卷</el-button>
+          <el-button type="text" size="small" @click="chapter(scope)">章</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
           <el-button type="text" size="small" @click="remove(scope)">删除</el-button>
         </template>
@@ -31,15 +31,14 @@
 
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
-    let tableData = []
-    tableData = response.data.data.content.map((data) => {
+    const tableData = response.data.data.content.map((data) => {
       return {
         id: data._id,
-        area: data.area.name,
-        bookName: data.bookName,
-        author: data.author,
-        illustrator: data.illustrator,
-        library: data.library.name
+        bookName: data.book.bookName,
+        name: data.name,
+        sequence: data.sequence,
+        releaseTime: vue.$moment(data.releaseTime).format('YYYY-MM-DD'),
+        file: window.config.upload + data.file.path + data.file.name
       }
     })
     return {
@@ -47,13 +46,14 @@
       total: response.data.data.totalElements
     }
   }
-  // 获取轻小说列表
-  const GetFictionList = vue => {
-    const fiction = new Promise((resolve, reject) => {
+  // 获取卷列表
+  const GetVolumeList = vue => {
+    const volume = new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
-        url: window.config.server + '/api/lightNovel/fiction',
+        url: window.config.server + '/api/lightNovel/volume',
         params: {
+          book: vue.$route.params.fictionId,
           pageNum: vue.formInline.currentPage - 1,
           pageSize: vue.formInline.pageSize
         },
@@ -67,14 +67,14 @@
         reject(error)
       })
     })
-    return fiction
+    return volume
   }
-  // 删除轻小说
-  const DeleteFiction = (vue, id) => {
-    const fiction = new Promise((resolve, reject) => {
+  // 删除卷
+  const DeleteVolume = (vue, id) => {
+    const volume = new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
-        url: window.config.server + '/api/lightNovel/fiction',
+        url: window.config.server + '/api/lightNovel/volume',
         params: {
           id
         },
@@ -88,7 +88,7 @@
         reject(error)
       })
     })
-    return fiction
+    return volume
   }
   export default {
     data () {
@@ -108,20 +108,16 @@
           prop: 'bookName'
         }, {
           key: '1',
-          columnLabel: '作者',
-          prop: 'author'
+          columnLabel: '卷名',
+          prop: 'name'
         }, {
           key: '2',
-          columnLabel: '插画师',
-          prop: 'illustrator'
+          columnLabel: '序列号',
+          prop: 'sequence'
         }, {
           key: '3',
-          columnLabel: '地区',
-          prop: 'area'
-        }, {
-          key: '4',
-          columnLabel: '文库',
-          prop: 'library'
+          columnLabel: '发售时间',
+          prop: 'releaseTime'
         }],
         // 列表数据
         tableData: [],
@@ -131,36 +127,36 @@
     methods: {
       view (row) {
         const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionInfo/' + id)
+        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.$route.params.fictionId + '/volumeInfo/' + id)
       },
-      volume (row) {
+      chapter (row) {
         const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + id)
+        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.$route.params.fictionId + '/chapterList/' + id)
       },
       edit (row) {
         const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionEdit/' + id)
+        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.$route.params.fictionId + '/volumeEdit/' + id)
       },
       remove (row) {
         const id = row.row.id
-        this.$confirm('此操作将删除该轻小说, 是否继续?', '提示', {
+        this.$confirm('此操作将删除该卷, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const Fiction = DeleteFiction(this, id)
+          const Volume = DeleteVolume(this, id)
 
-          Fiction.then((resolve) => {
+          Volume.then((resolve) => {
             if (resolve.data.code === '200') {
               this.loading = true
               this.$message({
                 type: 'success',
                 message: '删除成功!'
               })
-              // 获取轻小说列表
-              const fictionList = GetFictionList(this)
+              // 获取卷列表
+              const volumeList = GetVolumeList(this)
 
-              fictionList.then((resolve) => {
+              volumeList.then((resolve) => {
                 const list = List(this, resolve)
                 this.tableData = list.tableData
                 this.formInline.total = list.total
@@ -183,10 +179,10 @@
       toPage (page) {
         this.loading = true
         this.formInline.currentPage = page
-        // 获取轻小说列表
-        const fictionList = GetFictionList(this)
+        // 获取卷列表
+        const volumeList = GetVolumeList(this)
 
-        fictionList.then((resolve) => {
+        volumeList.then((resolve) => {
           const list = List(this, resolve)
           this.tableData = list.tableData
           this.formInline.total = list.total
@@ -197,10 +193,10 @@
       }
     },
     created: function () {
-      // 获取轻小说列表
-      const fictionList = GetFictionList(this)
+      // 获取卷列表
+      const volumeList = GetVolumeList(this)
 
-      fictionList.then((resolve) => {
+      volumeList.then((resolve) => {
         const list = List(this, resolve)
         this.tableData = list.tableData
         this.formInline.total = list.total

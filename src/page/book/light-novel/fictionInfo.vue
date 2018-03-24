@@ -2,13 +2,12 @@
   <div class="m-odr" v-loading="loading">
     <p>书名：{{book.bookName}}</p>
     <p>地区：{{book.area}}</p>
-    <p>发售时间：{{book.releaseTime}}</p>
+    <p>文库：{{book.library}}</p>
     <p>作者：{{book.author}}</p>
     <p>插画师：{{book.illustrator}}</p>
-    <p>文件：{{book.files}}</p>
+    <p>简介：{{book.introduction}}</p>
     <p>封面：{{book.cover}}</p>
     <img :src="book.cover" style="display: block">
-    <p>简介：{{book.introduction}}</p>
     <returnBtn></returnBtn>
   </div>
 </template>
@@ -32,6 +31,24 @@
       })
     })
     return country
+  }
+  // 获取文库信息
+  const GetLibraryAll = vue => {
+    const library = new Promise((resolve, reject) => {
+      vue.$http({
+        method: 'get',
+        url: window.config.server + '/api/basis/library',
+        headers: {
+          'languageCode': vue.$route.params.lang,
+          'Authorization': 'Bearer ' + vue.$cookie.get('token')
+        }
+      }).then((response) => {
+        resolve(response)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+    return library
   }
   // 获取书籍详情
   const GetFiction = vue => {
@@ -61,12 +78,11 @@
         book: {
           bookName: '',
           area: '',
-          releaseTime: '',
+          library: '',
           author: '',
           illustrator: '',
-          cover: '',
-          files: '',
-          introduction: ''
+          introduction: '',
+          cover: ''
         },
         loading: true
       }
@@ -79,29 +95,35 @@
       // 获取所有国家
       const Country = GetCountryAll(this)
 
+      // 获取所有文库
+      const Library = GetLibraryAll(this)
+
       // 获取书籍详细信息
       const Fiction = GetFiction(this)
 
-      Promise.all([Country, Fiction])
+      Promise.all([Country, Library, Fiction])
         .then((resolve) => {
-          let areaOptions = resolve[0].data.data.content.map(data => {
-            return {
-              value: data.id,
-              label: data.name
+          let area = ''
+          this.areaOptions = resolve[0].data.data.content.forEach(data => {
+            if (resolve[2].data.data.area === data.id) {
+              area = data.name
             }
           })
-          this.areaOptions = areaOptions
-          const book = {
-            bookName: resolve[1].data.data.bookName,
-            area: resolve[1].data.data.area,
-            releaseTime: this.$moment(resolve[1].data.data.releaseTime).format('YYYY-MM-DD HH:mm'),
-            author: resolve[1].data.data.author,
-            illustrator: resolve[1].data.data.illustrator,
-            cover: window.config.upload + resolve[1].data.data.cover.path + resolve[1].data.data.cover.name,
-            files: window.config.upload + resolve[1].data.data.bookFile.path + resolve[1].data.data.bookFile.name,
-            introduction: resolve[1].data.data.introduction
+          let library = ''
+          this.libraryOptions = resolve[1].data.data.library.forEach(data => {
+            if (resolve[2].data.data.library === data.id) {
+              library = data.name
+            }
+          })
+          this.book = {
+            bookName: resolve[2].data.data.bookName,
+            area,
+            library,
+            author: resolve[2].data.data.author,
+            illustrator: resolve[2].data.data.illustrator,
+            introduction: resolve[2].data.data.introduction,
+            cover: window.config.upload + resolve[2].data.data.cover.path + resolve[2].data.data.cover.name // 封面
           }
-          this.book = book
           this.loading = false
         }).catch((reject) => {
           window.publicFunction.error(reject, this)

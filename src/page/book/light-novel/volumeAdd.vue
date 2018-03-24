@@ -1,6 +1,5 @@
 <template>
-  <div class="m-odr"
-       v-loading="loading">
+  <div class="m-odr" v-loading="loading">
     <transition name="el-fade-in-linear">
       <el-form
         :model="ruleForm"
@@ -9,40 +8,30 @@
         label-width="80px"
         size="mini"
         class="demo-ruleForm">
-        <el-form-item class="s-wh-fl" label="书籍名称" prop="bookName">
-          <el-input v-model="ruleForm.bookName"></el-input>
-        </el-form-item>
-        <el-form-item class="s-wh-fl" label="地区" prop="area">
-          <el-select style="width: 100%;" v-model="ruleForm.area">
+        <el-form-item class="s-wh-fl" label="书籍名称" prop="book">
+          <el-select style="width: 100%;" v-model="ruleForm.book" filterable>
             <el-option
-              v-for="item in areaOptions"
+              v-for="item in bookNameOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item class="s-wh-fl" label="文库" prop="library">
-          <el-select style="width: 100%;" v-model="ruleForm.library">
-            <el-option
-              v-for="item in libraryOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+        <el-form-item class="s-wh-fl" label="卷名称" prop="name">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item class="s-wh-fl" label="序列号" prop="sequence">
+          <el-input-number v-model="ruleForm.sequence" :min="1" :max="100"></el-input-number>
+        </el-form-item>
+        <el-form-item class="s-wh-fl" label="发售时间" prop="releaseTime">
+          <el-date-picker v-model="ruleForm.releaseTime" type="date"></el-date-picker>
         </el-form-item>
         <el-form-item class="s-wh-fl" label="封面">
           <el-button @click="toggleShow">{{ruleForm.coverBtn}}</el-button>
         </el-form-item>
-        <el-form-item class="s-wh-fl" label="作者" prop="author">
-          <el-input v-model="ruleForm.author"></el-input>
-        </el-form-item>
-        <el-form-item class="s-wh-fl" label="插画师" prop="illustrator">
-          <el-input v-model="ruleForm.illustrator"></el-input>
-        </el-form-item>
-        <el-form-item class="s-wh-fl" label="简介" prop="introduction">
-          <el-input type="textarea" v-model="ruleForm.introduction"></el-input>
+        <el-form-item class="s-wh-fl" label="文件" prop="file">
+          <el-button @click="dialogFormVisible = true">{{ruleForm.filesBtn}}</el-button>
         </el-form-item>
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -50,6 +39,30 @@
         </el-form-item>
       </el-form>
     </transition>
+    <el-dialog title="上传小说文件" :visible.sync="dialogFormVisible">
+      <el-upload
+        class="upload-demo"
+        :accept="accept"
+        :headers="headers"
+        :action="action"
+        :on-preview="handlePictureCardPreview"
+        :file-list="fileList"
+        :multiple="true"
+        :on-success="handleAvatarSuccess"
+        :on-error="handleError"
+        :limit="limit"
+        :on-remove="handleRemove">
+        <el-button
+          slot="trigger"
+          size="small"
+          type="primary">选取文件</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传txt文件，且不超过50M</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="dialogFormVisible = false">取消</el-button>
+        <el-button size="mini" type="primary" @click="dialogFormVisible = false">确定</el-button>
+      </div>
+    </el-dialog>
     <my-upload
       field="img"
       @crop-upload-success="cropUploadSuccess"
@@ -107,13 +120,15 @@
     })
     return library
   }
-  // 添加书籍
-  const AddFiction = vue => {
+  // 获取所有书籍名称
+  const GetFictionAllName = vue => {
     const fiction = new Promise((resolve, reject) => {
       vue.$http({
-        method: 'post',
-        url: window.config.server + '/api/lightNovel/fiction',
-        data: vue.ruleForm,
+        method: 'get',
+        url: window.config.server + '/api/lightNovel/fictionAllName',
+        params: {
+          id: vue.$route.params.fictionId
+        },
         headers: {
           'languageCode': vue.$route.params.lang,
           'Authorization': 'Bearer ' + vue.$cookie.get('token')
@@ -126,6 +141,25 @@
     })
     return fiction
   }
+  // 添加书籍（卷）
+  const AddVolume = vue => {
+    const volume = new Promise((resolve, reject) => {
+      vue.$http({
+        method: 'post',
+        url: window.config.server + '/api/lightNovel/volume',
+        data: vue.ruleForm,
+        headers: {
+          'languageCode': vue.$route.params.lang,
+          'Authorization': 'Bearer ' + vue.$cookie.get('token')
+        }
+      }).then((response) => {
+        resolve(response)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+    return volume
+  }
   export default {
     data () {
       return {
@@ -134,15 +168,16 @@
           children: 'cities'
         },
         ruleForm: {
-          bookName: '', // 书籍名称
-          area: '', // 地区
-          library: '', // 文库
-          author: '', // 作者
-          illustrator: '', // 插画师
-          introduction: '', // 简介
+          book: '', // 书籍名称
+          name: '', // 卷名称
+          sequence: '', // 序列号
+          releaseTime: this.$moment(), // 发售时间
+          filesBtn: '点击上传文件', // 文件
+          file: '', // 文件id
           coverBtn: '点击上传封面', // 封面
           cover: '' // 封面id
         },
+        bookNameOptions: [],
         core: {
           action: window.config.upload + '/api/upload/img',
           show: false,
@@ -159,32 +194,26 @@
           noSquare: false,
           noRotate: false
         },
+        imgCutData: '',
         rules: {
-          bookName: [
+          book: [
             { required: true, message: '请输入书籍名称', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' },
             { pattern: /\S+/, message: '不能全为空格' }
           ],
-          area: [
-            { required: true, message: '请选择地区', trigger: 'blur' }
-          ],
-          library: [
-            { required: true, message: '请选择文库', trigger: 'blur' }
-          ],
-          author: [
-            { required: true, message: '请输入作者名称', trigger: 'blur' },
+          name: [
+            { required: true, message: '请输入卷名称', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' },
             { pattern: /\S+/, message: '不能全为空格' }
           ],
-          illustrator: [
-            { required: true, message: '请输入插画师名称', trigger: 'blur' },
-            { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' },
-            { pattern: /\S+/, message: '不能全为空格' }
+          sequence: [
+            { required: true, message: '请输入序列号', trigger: 'blur' }
           ],
-          introduction: [
-            { required: false, message: '请输入简介', trigger: 'blur' },
-            { min: 1, max: 300, message: '长度在 1 到 300 个字符', trigger: 'blur' },
-            { pattern: /\S+/, message: '不能全为空格' }
+          releaseTime: [
+            { required: true, message: '请选择发售时间', trigger: 'blur' }
+          ],
+          file: [
+            { required: true, message: '请上传文件', trigger: 'blur' }
           ]
         },
         fileList: [],
@@ -194,12 +223,11 @@
           'Authorization': 'Bearer ' + this.$cookie.get('token')
         },
         action: window.config.upload + '/api/upload/book',
+        accept: 'text/*',
         dialogImageUrl: '',
         dialogVisible: false,
         dialogFormVisible: false,
         limit: 1,
-        areaOptions: [],
-        libraryOptions: [],
         loading: true
       }
     },
@@ -207,25 +235,56 @@
       'my-upload': myUpload
     },
     methods: {
+      imageuploaded (res) {
+        if (res.errcode === 0) {
+          this.core.src = res.data.src
+        }
+      },
+      // 上传成功
+      handleAvatarSuccess (res, file, fileList) {
+        this.ruleForm.file = file.response.data.id
+        this.ruleForm.filesBtn = file.response.data.id
+      },
+      // 上传失败
+      handleError (err, file, fileList) {
+        this.$message.error('网络错误')
+        console.log(err)
+      },
+      // 删除文件
+      handleRemove (file, fileList) {
+        console.log('file', file)
+      },
+      // 上传
+      handlePictureCardPreview (file) {
+        this.dialogImageUrl = file.url
+        this.dialogVisible = true
+      },
+      addName () {
+        console.log(this.ruleForm)
+      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // 添加轻小说
-            const Fiction = AddFiction(this)
+            if (this.ruleForm.file !== '' && this.ruleForm.cover !== '') {
+              // 添加轻小说
+              const Volume = AddVolume(this)
 
-            Fiction.then((resolve) => {
-              if (resolve.data.code === '200') {
-                this.$confirm('添加轻小说成功', '提示', {
-                  confirmButtonText: '确定',
-                  showCancelButton: false,
-                  type: 'success'
-                }).then(() => {
-                  this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList')
-                })
-              }
-            }).catch((reject) => {
-              window.publicFunction.error(reject, this)
-            })
+              Volume.then((resolve) => {
+                if (resolve.data.code === '200') {
+                  this.$confirm('添加卷成功', '提示', {
+                    confirmButtonText: '确定',
+                    showCancelButton: false,
+                    type: 'success'
+                  }).then(() => {
+                    this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList')
+                  })
+                }
+              }).catch((reject) => {
+                window.publicFunction.error(reject, this)
+              })
+            } else {
+              this.$message.error('请先上传文件')
+            }
           } else {
             console.log('error submit!!')
             return false
@@ -258,7 +317,10 @@
       // 获取所有文库
       const Library = GetLibraryAll(this)
 
-      Promise.all([Country, Library])
+      // 获取所有书籍名称
+      const FictionAllName = GetFictionAllName(this)
+
+      Promise.all([Country, Library, FictionAllName])
         .then((resolve) => {
           this.areaOptions = resolve[0].data.data.content.map(data => {
             return {
@@ -275,6 +337,13 @@
             }
           })
           this.ruleForm.library = this.libraryOptions[0].value
+
+          this.bookNameOptions = resolve[2].data.data.book.map(data => {
+            return {
+              value: data._id,
+              label: data.bookName
+            }
+          })
           this.loading = false
         }).catch((reject) => {
           window.publicFunction.error(reject, this)
