@@ -73,7 +73,7 @@
   import myUpload from 'vue-image-crop-upload'
   // 获取国家信息
   const GetCountryAll = vue => {
-    const country = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/basis/country',
@@ -87,11 +87,10 @@
         reject(error)
       })
     })
-    return country
   }
   // 获取文库信息
   const GetLibraryAll = vue => {
-    const library = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/basis/library',
@@ -105,11 +104,10 @@
         reject(error)
       })
     })
-    return library
   }
   // 添加书籍
   const AddFiction = vue => {
-    const fiction = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/lightNovel/fiction',
@@ -124,7 +122,6 @@
         reject(error)
       })
     })
-    return fiction
   }
   export default {
     data () {

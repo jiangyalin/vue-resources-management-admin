@@ -29,7 +29,7 @@
 <script type="text/ecmascript-6">
   // 添加账户
   const AddAccount = vue => {
-    const account = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/user/account',
@@ -44,7 +44,6 @@
         reject(error)
       })
     })
-    return account
   }
   export default {
     name: 'accountAdd',

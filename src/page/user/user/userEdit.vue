@@ -59,7 +59,7 @@
   import returnBtn from './../../../components/public/returnBtn.vue'
   // 获取用户详情
   const GetUser = vue => {
-    const user = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/user/userInfo',
@@ -76,11 +76,10 @@
         reject(error)
       })
     })
-    return user
   }
   // 编辑用户
   const EditUser = vue => {
-    const user = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/user/userInfo',
@@ -95,11 +94,10 @@
         reject(error)
       })
     })
-    return user
   }
   // 上传头像
   const UploadAvatar = vue => {
-    const avatar = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/upload/avatar',
@@ -116,7 +114,6 @@
         reject(error)
       })
     })
-    return avatar
   }
   export default {
     name: 'userEdit',

@@ -57,7 +57,7 @@
   import CanvasAvatar from './../../../components/public/canvas-avatar/index.vue'
   // 添加用户
   const AddUser = vue => {
-    const user = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/user/user',
@@ -72,11 +72,10 @@
         reject(error)
       })
     })
-    return user
   }
   // 上传头像
   const UploadAvatar = vue => {
-    const avatar = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/upload/avatar',
@@ -93,7 +92,6 @@
         reject(error)
       })
     })
-    return avatar
   }
   export default {
     name: 'userAdd',

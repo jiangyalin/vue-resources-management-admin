@@ -52,7 +52,7 @@
   import platform from './../../../router/platform' // 运营
   // 用户登录
   const LoginAccount = vue => {
-    const login = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/login',
@@ -69,7 +69,6 @@
         reject(error)
       })
     })
-    return login
   }
   export default {
     name: '',

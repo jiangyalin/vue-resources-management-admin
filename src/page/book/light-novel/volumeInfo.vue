@@ -14,7 +14,7 @@
   import returnBtn from './../../../components/public/returnBtn.vue'
   // 获取卷详情
   const GetVolume = vue => {
-    const volume = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/volumeInfo',
@@ -31,7 +31,6 @@
         reject(error)
       })
     })
-    return volume
   }
   export default {
     name: '',

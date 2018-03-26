@@ -48,7 +48,7 @@
   }
   // 获取卷列表
   const GetVolumeList = vue => {
-    const volume = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/volume',
@@ -67,11 +67,10 @@
         reject(error)
       })
     })
-    return volume
   }
   // 删除卷
   const DeleteVolume = (vue, id) => {
-    const volume = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
         url: window.config.server + '/api/lightNovel/volume',
@@ -88,7 +87,6 @@
         reject(error)
       })
     })
-    return volume
   }
   export default {
     data () {

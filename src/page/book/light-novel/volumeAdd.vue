@@ -86,7 +86,7 @@
   import myUpload from 'vue-image-crop-upload'
   // 获取国家信息
   const GetCountryAll = vue => {
-    const country = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/basis/country',
@@ -100,11 +100,10 @@
         reject(error)
       })
     })
-    return country
   }
   // 获取文库信息
   const GetLibraryAll = vue => {
-    const library = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/basis/library',
@@ -118,11 +117,10 @@
         reject(error)
       })
     })
-    return library
   }
   // 获取所有书籍名称
   const GetFictionAllName = vue => {
-    const fiction = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/fictionAllName',
@@ -139,11 +137,10 @@
         reject(error)
       })
     })
-    return fiction
   }
   // 添加书籍（卷）
   const AddVolume = vue => {
-    const volume = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/lightNovel/volume',
@@ -158,7 +155,6 @@
         reject(error)
       })
     })
-    return volume
   }
   export default {
     data () {

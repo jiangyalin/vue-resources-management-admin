@@ -29,8 +29,7 @@
 
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
-    let tableData = []
-    tableData = response.data.data.content.map((data) => {
+    const tableData = response.data.data.content.map((data) => {
       const type = data.type === 0 ? '管理员' : '一般用户'
       const user = data.user !== undefined ? data.user.nickname : ''
       return {
@@ -48,7 +47,7 @@
   }
   // 获取账户列表
   const GetAccountList = vue => {
-    const account = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/user/account',
@@ -66,11 +65,10 @@
         reject(error)
       })
     })
-    return account
   }
   // 删除账户
   const DeleteUser = (vue, id) => {
-    const user = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
         url: window.config.server + '/api/user/account',
@@ -87,7 +85,6 @@
         reject(error)
       })
     })
-    return user
   }
   export default {
     name: 'accountList',

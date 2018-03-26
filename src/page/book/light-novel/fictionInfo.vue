@@ -16,7 +16,7 @@
   import returnBtn from './../../../components/public/returnBtn.vue'
   // 获取国家信息
   const GetCountryAll = vue => {
-    const country = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/basis/country',
@@ -30,11 +30,10 @@
         reject(error)
       })
     })
-    return country
   }
   // 获取文库信息
   const GetLibraryAll = vue => {
-    const library = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/basis/library',
@@ -48,11 +47,10 @@
         reject(error)
       })
     })
-    return library
   }
   // 获取书籍详情
   const GetFiction = vue => {
-    const fiction = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/fictionInfo',
@@ -69,7 +67,6 @@
         reject(error)
       })
     })
-    return fiction
   }
   export default {
     name: '',

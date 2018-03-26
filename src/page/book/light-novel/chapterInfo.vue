@@ -13,7 +13,7 @@
   import returnBtn from './../../../components/public/returnBtn.vue'
   // 获取章详情
   const GetChapter = vue => {
-    const chapter = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/chapterInfo',
@@ -30,7 +30,6 @@
         reject(error)
       })
     })
-    return chapter
   }
   export default {
     name: '',

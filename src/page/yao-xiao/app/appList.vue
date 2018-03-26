@@ -29,8 +29,7 @@
 
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
-    let tableData = []
-    tableData = response.data.data.content.map((data) => {
+    const tableData = response.data.data.content.map((data) => {
       return {
         id: data._id,
         name: data.name,
@@ -46,7 +45,7 @@
   }
   // 获取app列表
   const GetAppList = vue => {
-    const app = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/yaoxiao/app',
@@ -64,11 +63,10 @@
         reject(error)
       })
     })
-    return app
   }
   // 删除app
   const DeleteApp = (vue, id) => {
-    const app = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
         url: window.config.server + '/api/yaoxiao/app',
@@ -85,7 +83,6 @@
         reject(error)
       })
     })
-    return app
   }
   export default {
     data () {

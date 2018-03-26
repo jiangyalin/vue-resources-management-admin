@@ -31,8 +31,7 @@
 
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
-    let tableData = []
-    tableData = response.data.data.content.map((data) => {
+    const tableData = response.data.data.content.map((data) => {
       return {
         id: data._id,
         area: data.area.name,
@@ -49,7 +48,7 @@
   }
   // 获取轻小说列表
   const GetFictionList = vue => {
-    const fiction = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/fiction',
@@ -67,11 +66,10 @@
         reject(error)
       })
     })
-    return fiction
   }
   // 删除轻小说
   const DeleteFiction = (vue, id) => {
-    const fiction = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
         url: window.config.server + '/api/lightNovel/fiction',
@@ -88,7 +86,6 @@
         reject(error)
       })
     })
-    return fiction
   }
   export default {
     data () {

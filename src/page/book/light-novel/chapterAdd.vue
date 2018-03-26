@@ -74,7 +74,7 @@
   import myUpload from 'vue-image-crop-upload'
   // 获取所有书籍名称
   const GetFictionAllName = vue => {
-    const fiction = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/fictionAllName',
@@ -91,11 +91,10 @@
         reject(error)
       })
     })
-    return fiction
   }
   // 获取此书籍下所有卷名称
   const GetVolumeAllName = vue => {
-    const volume = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/volumeAllName',
@@ -112,11 +111,10 @@
         reject(error)
       })
     })
-    return volume
   }
   // 添加书籍（章）
   const AddChapter = vue => {
-    const chapter = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/lightNovel/chapter',
@@ -131,7 +129,6 @@
         reject(error)
       })
     })
-    return chapter
   }
   export default {
     data () {

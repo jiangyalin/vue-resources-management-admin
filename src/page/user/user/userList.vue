@@ -29,8 +29,7 @@
 
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
-    let tableData = []
-    tableData = response.data.data.content.map((data) => {
+    const tableData = response.data.data.content.map((data) => {
       let gender = ''
       vue.genderOptions.forEach(genderOptions => {
         if (genderOptions.value === data.gender) gender = genderOptions.label
@@ -52,7 +51,7 @@
   }
   // 获取用户列表
   const GetUserList = vue => {
-    const user = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/user/user',
@@ -70,11 +69,10 @@
         reject(error)
       })
     })
-    return user
   }
   // 删除用户
   const DeleteUser = (vue, id) => {
-    const user = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
         url: window.config.server + '/api/user/user',
@@ -91,7 +89,6 @@
         reject(error)
       })
     })
-    return user
   }
   export default {
     name: 'userList',

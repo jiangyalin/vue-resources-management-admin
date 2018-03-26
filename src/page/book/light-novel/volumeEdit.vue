@@ -86,7 +86,7 @@
   import returnBtn from './../../../components/public/returnBtn.vue'
   // 获取卷详情
   const GetVolume = vue => {
-    const volume = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/volumeInfo',
@@ -103,11 +103,10 @@
         reject(error)
       })
     })
-    return volume
   }
   // 获取所有书籍名称
   const GetFictionAllName = vue => {
-    const fiction = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/fictionAllName',
@@ -124,11 +123,10 @@
         reject(error)
       })
     })
-    return fiction
   }
   // 编辑书籍（卷）
   const EditVolume = vue => {
-    const volume = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
         url: window.config.server + '/api/lightNovel/volumeInfo',
@@ -143,7 +141,6 @@
         reject(error)
       })
     })
-    return volume
   }
   export default {
     name: 'volumeEdit',

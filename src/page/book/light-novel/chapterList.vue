@@ -48,7 +48,7 @@
   }
   // 获取章列表
   const GetChapterList = vue => {
-    const chapter = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/lightNovel/chapter',
@@ -67,11 +67,10 @@
         reject(error)
       })
     })
-    return chapter
   }
   // 删除章
   const DeleteChapter = (vue, id) => {
-    const chapter = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
         url: window.config.server + '/api/lightNovel/chapter',
@@ -88,7 +87,6 @@
         reject(error)
       })
     })
-    return chapter
   }
   export default {
     data () {

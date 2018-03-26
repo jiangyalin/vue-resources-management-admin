@@ -13,7 +13,7 @@
   import returnBtn from './../../../components/public/returnBtn.vue'
   // 获取app详情
   const GetApp = vue => {
-    const app = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/yaoxiao/appInfo',
@@ -30,7 +30,6 @@
         reject(error)
       })
     })
-    return app
   }
   export default {
     name: '',

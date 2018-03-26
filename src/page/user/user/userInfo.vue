@@ -16,7 +16,7 @@
   import returnBtn from './../../../components/public/returnBtn.vue'
   // 获取用户详情
   const GetUser = vue => {
-    const user = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
         url: window.config.server + '/api/user/userInfo',
@@ -33,7 +33,6 @@
         reject(error)
       })
     })
-    return user
   }
   export default {
     name: '',
