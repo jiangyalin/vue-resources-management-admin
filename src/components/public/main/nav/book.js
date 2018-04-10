@@ -49,6 +49,11 @@ const data = (vue) => {
             name: 'chapterEdit',
             path: '/book/lightNovel/fictionList/volumeList/' + vue.$route.params.fictionId + '/chapterList/' + vue.$route.params.volumeId + '/chapterEdit/' + vue.$route.params.chapterId,
             index: '2-1-3-3-2'
+          }, {
+            text: '上传章',
+            name: 'chapterUpload',
+            path: '/book/lightNovel/fictionList/volumeList/' + vue.$route.params.fictionId + '/chapterList/' + vue.$route.params.volumeId + '/chapterUpload/' + vue.$route.params.chapterId,
+            index: '2-1-3-3-2'
           }]
         }]
       }]

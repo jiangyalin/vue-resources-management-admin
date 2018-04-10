@@ -1,5 +1,6 @@
 import index from './../../components/login/index.vue'
 import login from './../../page/login/login/login.vue'
+import join from './../../page/login/join/join.vue'
 
 export default {
   path: '/:lang/login',
@@ -16,6 +17,10 @@ export default {
     {
       path: 'login/login',
       component: login
+    },
+    {
+      path: 'join/join',
+      component: join
     }
   ]
 }

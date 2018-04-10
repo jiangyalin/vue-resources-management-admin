@@ -1,19 +1,34 @@
 <template>
   <div class="m-lgn">
-    <transition name="el-fade-in-linear">
+    <transition
+      name="el-fade-in-linear">
       <div class="loginPage">
-        <el-form class="form" :model="ruleForm" ref="ruleForm">
+        <el-form
+          class="form"
+          :model="ruleForm"
+          ref="ruleForm">
           <div class="item">
-            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" ref="username">
+            <input
+              type="text"
+              name="username"
+              placeholder="请输入用户名"
+              autocomplete="off"
+              ref="username">
           </div>
           <div class="item">
-            <input type="password" name="password" placeholder="请输入密码" autocomplete="off" @keyup.enter="submitForm('ruleForm')" ref="pwd">
-          </div>
-          <div class="join">
-            <p class="join-p">去注册</p>
+            <input
+              type="password"
+              name="password"
+              placeholder="请输入密码"
+              autocomplete="off"
+              @keyup.enter="submitForm('ruleForm')"
+              ref="pwd">
           </div>
           <div class="btn">
-            <button data-v-d1feee42="" type="button" @click="submitForm('ruleForm')">登录</button>
+            <button
+              data-v-d1feee42=""
+              type="button"
+              @click="submitForm('ruleForm')">登录</button>
           </div>
         </el-form>
       </div>
@@ -226,19 +241,6 @@
     padding:140px 80px 20px 80px;
     background:url(../../../assets/images/login/logo.png) no-repeat center 60px;
   }
-  .form .join{
-    width: 100%;
-    height: 12px;
-    font-size: 12px;
-    color: #ff972b;
-    text-align: right;
-    line-height: 12px;
-    transition: .15s;
-    cursor: pointer;
-  }
-  .form .join:hover{
-    color: #fc7b29;
-  }
   .form .item{
     height:44px;
     width:330px;
@@ -261,7 +263,7 @@
     color:#fff;
     position:relative;
     left:-2px;
-    margin-top:20px;
+    margin-top:32px;
   }
   .form .btn button{
     display: block;

@@ -5,6 +5,7 @@
     <p>章名：{{chapter.name}}</p>
     <p>序列号：{{chapter.sequence}}</p>
     <p>文件：{{chapter.file}}</p>
+    <div class="u-text" ref="text"></div>
     <returnBtn></returnBtn>
   </div>
 </template>
@@ -40,7 +41,8 @@
           name: '', // 章名称
           volume: '', // 卷名称
           file: '', // 文件
-          book: '' // 书
+          book: '', // 书
+          text: '' // 内容
         },
         loading: true
       }
@@ -59,8 +61,10 @@
           volume: resolve.data.data.volume.name, // 卷名称
           name: resolve.data.data.name, // 章名称
           file: window.config.upload + resolve.data.data.file.path + resolve.data.data.file.name, // 文件
-          book: resolve.data.data.book.bookName // 书
+          book: resolve.data.data.book.bookName, // 书
+          text: resolve.data.data.file.content
         }
+        this.$refs.text.innerHTML = this.chapter.text
         this.loading = false
       }).catch((reject) => {
         window.publicFunction.error(reject, this)
@@ -70,5 +74,13 @@
 </script>
 
 <style scoped>
+  .u-text{
+    padding-bottom: 40px;
+  }
+</style>
 
+<style>
+  .u-text p{
+    margin: 0;
+  }
 </style>

@@ -15,10 +15,14 @@ import moment from 'moment'
 import fullCalendar from 'vue-fullcalendar'
 import VueSession from 'vue-session'
 import NzhCn from 'nzh/cn' // 数字转中文
+import quillEditor from 'vue-quill-editor'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 import './style/app/app.scss'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 import App from './App.vue'
 
 Vue.use(VueI18n)
@@ -28,6 +32,7 @@ Vue.use(VueSession)
 Vue.use(ElementUI)
 Object.defineProperty(Vue.prototype, '$moment', { value: moment })
 Object.defineProperty(Vue.prototype, '$NzhCn', { value: NzhCn })
+Vue.use(quillEditor, {})
 
 Object.keys(locales).forEach(function (lang) {
   Vue.locale(lang, locales[lang])

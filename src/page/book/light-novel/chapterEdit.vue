@@ -34,39 +34,18 @@
         <el-form-item class="s-wh-fl" label="序列号" prop="sequence">
           <el-input-number v-model="ruleForm.sequence" :min="1" :max="100"></el-input-number>
         </el-form-item>
-        <el-form-item class="s-wh-fl" label="文件" prop="file">
-          <el-button @click="dialogFormVisible = true">{{ruleForm.filesBtn}}</el-button>
-        </el-form-item>
+        <!--<el-form-item class="s-wh-fl" label="文件" prop="file">-->
+          <!--<el-button @click="dialogFormVisible = true">{{ruleForm.filesBtn}}</el-button>-->
+        <!--</el-form-item>-->
+        <div class="s-wh-fl u-quill">
+          <quill-editor ref="myTextEditor" :content="ruleForm.content" :options="editorOption" @change="onEditorChange"></quill-editor>
+        </div>
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </transition>
-    <el-dialog title="上传小说文件" :visible.sync="dialogFormVisible">
-      <el-upload
-        class="upload-demo"
-        :accept="accept"
-        :headers="headers"
-        :action="action"
-        :on-preview="handlePictureCardPreview"
-        :file-list="fileList"
-        :multiple="true"
-        :on-success="handleAvatarSuccess"
-        :on-error="handleError"
-        :limit="limit"
-        :on-remove="handleRemove">
-        <el-button
-          slot="trigger"
-          size="small"
-          type="primary">选取文件</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传txt文件，且不超过50M</div>
-      </el-upload>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="dialogFormVisible = false">取消</el-button>
-        <el-button size="mini" type="primary" @click="dialogFormVisible = false">确定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -161,9 +140,11 @@
           book: '', // 书籍名称
           volume: '', // 卷名称
           name: '', // 章节名称
-          sequence: '', // 序列号
-          filesBtn: '点击上传文件', // 文件
-          file: '' // 文件id
+          content: '',
+          sequence: '' // 序列号
+        },
+        editorOption: {
+          height: '500px'
         },
         bookNameOptions: [],
         volumeNameOptions: [],
@@ -190,18 +171,6 @@
             { required: true, message: '请上传文件', trigger: 'blur' }
           ]
         },
-        fileList: [],
-        images: [],
-        headers: {
-          'languageCode': this.$route.params.lang,
-          'Authorization': 'Bearer ' + this.$cookie.get('token')
-        },
-        action: window.config.upload + '/api/upload/book',
-        accept: 'text/*',
-        dialogImageUrl: '',
-        dialogVisible: false,
-        dialogFormVisible: false,
-        limit: 1,
         loading: true
       }
     },
@@ -209,24 +178,9 @@
       'my-upload': myUpload
     },
     methods: {
-      // 上传成功
-      handleAvatarSuccess (res, file, fileList) {
-        this.ruleForm.file = file.response.data.id
-        this.ruleForm.filesBtn = file.response.data.id
-      },
-      // 上传失败
-      handleError (err, file, fileList) {
-        this.$message.error('网络错误')
-        console.log(err)
-      },
-      // 删除文件
-      handleRemove (file, fileList) {
-        console.log('file', file)
-      },
-      // 上传
-      handlePictureCardPreview (file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisible = true
+      onEditorChange (event) {
+        this.ruleForm.content = event.html
+        console.log('event', event)
       },
       // 获取所有卷名称
       getVolume () {
@@ -299,6 +253,7 @@
             name: resolve[1].data.data.name, // 章名称
             file: resolve[1].data.data.file._id, // 文件
             filesBtn: resolve[1].data.data.file._id, // 文件
+            content: resolve[1].data.data.file.content,
             book: resolve[1].data.data.book._id // 书
           }
 
@@ -330,12 +285,19 @@
     padding: 30px 30px 0 0;
   }
 
-  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
     width: 100%;
   }
 
   .s-wh-fl{
     width: 50%;
     float: left;
+  }
+
+  .u-quill{
+    float: left;
+    padding: 0 0 30px 30px;
+    width: 100%;
+    box-sizing: border-box;
   }
 </style>

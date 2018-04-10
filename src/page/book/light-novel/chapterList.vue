@@ -15,11 +15,12 @@
         :key="item.key"
         :width="item.width"
         show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="170">
+      <el-table-column fixed="right" label="操作" width="210">
         <template slot-scope="scope">
           <a class="el-button el-button--text el-button--small" style="text-decoration: none" :href="scope.row.file" download="w3logo">下载</a>
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
+          <el-button type="text" size="small" @click="upload(scope)">上传</el-button>
           <el-button type="text" size="small" @click="remove(scope)">删除</el-button>
         </template>
       </el-table-column>
@@ -38,7 +39,8 @@
         volume: data.volume.name,
         sequence: data.sequence,
         releaseTime: vue.$moment(data.releaseTime).format('YYYY-MM-DD'),
-        file: window.config.upload + data.file.path + data.file.name
+        file: ''
+//        file: window.config.upload + data.file.path + data.file.name
       }
     })
     return {
@@ -130,6 +132,10 @@
       edit (row) {
         const id = row.row.id
         this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.$route.params.fictionId + '/chapterList/' + this.$route.params.volumeId + '/chapterEdit/' + id)
+      },
+      upload (row) {
+        const id = row.row.id
+        this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.$route.params.fictionId + '/chapterList/' + this.$route.params.volumeId + '/chapterUpload/' + id)
       },
       remove (row) {
         const id = row.row.id
