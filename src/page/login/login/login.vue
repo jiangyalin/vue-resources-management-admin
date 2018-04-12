@@ -10,25 +10,17 @@
             <input type="password" name="password" placeholder="请输入密码" autocomplete="off" @keyup.enter="submitForm('ruleForm')" ref="pwd">
           </div>
           <div class="join">
-            <p class="join-p">去注册</p>
+            <p class="join-p" @click="toJoin">去注册</p>
           </div>
           <div class="btn">
-            <button data-v-d1feee42="" type="button" @click="submitForm('ruleForm')">登录</button>
+            <button type="button" @click="submitForm('ruleForm')">登录</button>
           </div>
         </el-form>
       </div>
     </transition>
     <div class="backstretch">
-      <img class="bg-img"
-           @load="imgSize"
-           :style="bgImg1"
-           src="../../../assets/images/login/bgimg.jpg"
-           ref="bgImg">
-      <img class="bg-img"
-           @load="imgSize"
-           :style="bgImg2"
-           src="../../../assets/images/login/bgimg2.jpg"
-           ref="bgImg2">
+      <img class="bg-img" @load="imgSize" :style="bgImg1" src="../../../assets/images/login/bgimg.jpg" ref="bgImg">
+      <img class="bg-img" @load="imgSize" :style="bgImg2" src="../../../assets/images/login/bgimg2.jpg" ref="bgImg2">
     </div>
   </div>
 </template>
@@ -99,6 +91,10 @@
     },
     components: {},
     methods: {
+      // 去注册
+      toJoin () {
+        this.$router.push('/' + this.$route.params.lang + '/login/join')
+      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -112,7 +108,7 @@
                 this.$cookie.set('userId', resolve.data.data.user._id, 7)
                 this.$cookie.set('userName', resolve.data.data.user.nickname, 7)
                 this.$cookie.set('token', resolve.data.data.token, 7)
-
+                console.log('pppp')
                 window.setTimeout(() => {
                   this.$router.addRoutes(platform)
                   this.$router.push('/')
@@ -234,10 +230,13 @@
     text-align: right;
     line-height: 12px;
     transition: .15s;
-    cursor: pointer;
   }
   .form .join:hover{
     color: #fc7b29;
+  }
+  .form .join-p{
+    float: right;
+    cursor: pointer;
   }
   .form .item{
     height:44px;

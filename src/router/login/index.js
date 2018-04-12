@@ -19,6 +19,10 @@ export default {
       component: login
     },
     {
+      path: 'join',
+      redirect: 'join/join'
+    },
+    {
       path: 'join/join',
       component: join
     }

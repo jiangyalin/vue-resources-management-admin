@@ -1,49 +1,30 @@
 <template>
   <div class="m-lgn">
-    <transition
-      name="el-fade-in-linear">
+    <transition name="el-fade-in-linear">
       <div class="loginPage">
-        <el-form
-          class="form"
-          :model="ruleForm"
-          ref="ruleForm">
+        <div class="form">
           <div class="item">
-            <input
-              type="text"
-              name="username"
-              placeholder="请输入用户名"
-              autocomplete="off"
-              ref="username">
+            <input type="text" placeholder="请输入邮箱" autocomplete="off" ref="eMail">
           </div>
           <div class="item">
-            <input
-              type="password"
-              name="password"
-              placeholder="请输入密码"
-              autocomplete="off"
-              @keyup.enter="submitForm('ruleForm')"
-              ref="pwd">
+            <input type="password" placeholder="请输入密码" autocomplete="off" ref="pwd">
+          </div>
+          <div class="item">
+            <input type="password" placeholder="请再次输入密码" autocomplete="off" ref="newPwd">
+          </div>
+          <div class="item">
+            <input class="u-code-it" type="text" placeholder="请输入验证码" autocomplete="off" ref="verificationCode">
+            <button class="u-code" type="button" @click="sendCode">{{ruleForm.btnText}}</button>
           </div>
           <div class="btn">
-            <button
-              data-v-d1feee42=""
-              type="button"
-              @click="submitForm('ruleForm')">登录</button>
+            <button type="button" @click="submitForm('ruleForm')">注册</button>
           </div>
-        </el-form>
+        </div>
       </div>
     </transition>
     <div class="backstretch">
-      <img class="bg-img"
-           @load="imgSize"
-           :style="bgImg1"
-           src="../../../assets/images/login/bgimg.jpg"
-           ref="bgImg">
-      <img class="bg-img"
-           @load="imgSize"
-           :style="bgImg2"
-           src="../../../assets/images/login/bgimg2.jpg"
-           ref="bgImg2">
+      <img class="bg-img" @load="imgSize" :style="bgImg1" src="../../../assets/images/login/bgimg.jpg" ref="bgImg">
+      <img class="bg-img" @load="imgSize" :style="bgImg2" src="../../../assets/images/login/bgimg2.jpg" ref="bgImg2">
     </div>
   </div>
 </template>
@@ -94,61 +75,78 @@
           children: 'cities'
         },
         ruleForm: {
-          userName: '', // 用户名
-          pwd: '' // 密码
-        },
-        rules: {
-          userName: [
-            { required: true, message: '请输入用户名', trigger: 'blur' },
-            { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' },
-            { pattern: /\S+/, message: '不能全为空格' }
-          ],
-          pwd: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
-            { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' },
-            { pattern: /\S+/, message: '不能全为空格' }
-          ]
+          eMail: '', // 邮箱
+          pwd: '', // 密码
+          newPwd: '',
+          verificationCode: '', // 验证码
+          btnText: '发送验证码'
         },
         loading: false
       }
     },
     components: {},
     methods: {
-      submitForm (formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.ruleForm.userName = this.$refs.username.value
-            this.ruleForm.pwd = this.$refs.pwd.value
-            // 登录用户
-            const Login = LoginAccount(this)
-
-            Login.then((resolve) => {
-              if (resolve.data.code === '200') {
-                this.$cookie.set('userId', resolve.data.data.user._id, 7)
-                this.$cookie.set('userName', resolve.data.data.user.nickname, 7)
-                this.$cookie.set('token', resolve.data.data.token, 7)
-
-                window.setTimeout(() => {
-                  this.$router.addRoutes(platform)
-                  this.$router.push('/')
-                }, 1)
-              } else {
-                this.$message({
-                  type: 'error',
-                  message: '登录失败,账号或者密码错误请重试!'
-                })
-              }
-            }).catch((reject) => {
-              window.publicFunction.error(reject, this)
-            })
-          } else {
-            console.log('error submit!!')
-            return false
-          }
+      // 数据同步
+      dataSync () {
+        this.ruleForm.eMail = this.$refs.eMail.value
+        this.ruleForm.pwd = this.$refs.pwd.value
+        this.ruleForm.newPwd = this.$refs.newPwd.value
+        this.ruleForm.verificationCode = this.$refs.verificationCode.value
+      },
+      // 验证
+      verification (callback) {
+        if (this.ruleForm.eMail === '') {
+          this.$message.warning('邮箱不能为空')
+        } else if (!new RegExp('^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$').test(this.ruleForm.eMail)) {
+          this.$message.warning('邮箱格式错误')
+        } else if (this.ruleForm.pwd === '') {
+          this.$message.warning('密码不能为空')
+        } else if (!new RegExp('^[a-zA-Z0-9_\u4e00-\u9fa5]{6,18}$').test(this.ruleForm.pwd)) {
+          this.$message.warning('密码应为有数字，字母，下划线组成的6-18位的组合')
+        } else if (this.ruleForm.newPwd !== this.ruleForm.pwd) {
+          this.$message.warning('两次密码不相同')
+        } else {
+          callback()
+        }
+      },
+      // 发送验证码
+      sendCode () {
+        this.dataSync()
+        this.verification(() => {
+          this.ruleForm.btnText = '60'
+          let text = window.setInterval(() => {
+            if (this.ruleForm.btnText > 0) {
+              this.ruleForm.btnText = Number(this.ruleForm.btnText) - 1
+            } else {
+              this.ruleForm.btnText = '发送验证码'
+              window.clearInterval(text)
+            }
+          }, 1000)
         })
       },
-      resetForm (formName) {
-        this.$refs[formName].resetFields()
+      submitForm () {
+        // 登录用户
+        const Login = LoginAccount(this)
+
+        Login.then((resolve) => {
+          if (resolve.data.code === '200') {
+            this.$cookie.set('userId', resolve.data.data.user._id, 7)
+            this.$cookie.set('userName', resolve.data.data.user.nickname, 7)
+            this.$cookie.set('token', resolve.data.data.token, 7)
+
+            window.setTimeout(() => {
+              this.$router.addRoutes(platform)
+              this.$router.push('/')
+            }, 1)
+          } else {
+            this.$message({
+              type: 'error',
+              message: '登录失败,账号或者密码错误请重试!'
+            })
+          }
+        }).catch((reject) => {
+          window.publicFunction.error(reject, this)
+        })
       },
       imgSize () {
         if (this.$refs.bgImg) {
@@ -226,11 +224,11 @@
   }
   .loginPage{
     width:490px;
-    height:380px;
+    height:485px;
     position:absolute;
     left:50%;
     top:50%;
-    margin:-190px 0 0 -245px;
+    margin:-242px 0 0 -245px;
     background:#fff;
     z-index:9;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
@@ -239,9 +237,10 @@
   }
   .form{
     padding:140px 80px 20px 80px;
-    background:url(../../../assets/images/login/logo.png) no-repeat center 60px;
+    background:url(../../../assets/images/join/logo.png) no-repeat center 60px;
   }
   .form .item{
+    position: relative;
     height:44px;
     width:330px;
     border:1px solid #dddee1;
@@ -255,8 +254,25 @@
     background:none;
     text-indent:12px;
   }
+  .u-code-it{
+    padding-right: 100px;
+    box-sizing: border-box;
+  }
+  .u-code{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 90px;
+    height: 44px;
+    color: #747272;
+    font-size: 12px;
+    line-height: 44px;
+    border: 0;
+    background-color: rgba(221, 221, 221, 1);
+    cursor: pointer;
+  }
   .form .btn{
-    background: url(../../../assets/images/login/btn.png) no-repeat center center;
+    background: url(../../../assets/images/join/btn.png) no-repeat center center;
     width:344px;
     height:55px;
     line-height:55px;

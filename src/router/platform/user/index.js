@@ -1,6 +1,5 @@
 import index from '../../../components/public/main/index.vue'
 import user from './user'
-import account from './account'
 
 let children = [
   {
@@ -14,7 +13,6 @@ let children = [
 ]
 
 children.push(...user)
-children.push(...account)
 
 export default {
   path: '/:lang/user',
