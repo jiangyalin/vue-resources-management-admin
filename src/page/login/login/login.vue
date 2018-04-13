@@ -108,7 +108,6 @@
                 this.$cookie.set('userId', resolve.data.data.user._id, 7)
                 this.$cookie.set('userName', resolve.data.data.user.nickname, 7)
                 this.$cookie.set('token', resolve.data.data.token, 7)
-                console.log('pppp')
                 window.setTimeout(() => {
                   this.$router.addRoutes(platform)
                   this.$router.push('/')
