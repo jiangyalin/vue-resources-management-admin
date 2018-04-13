@@ -4,17 +4,13 @@
       <div class="loginPage">
         <div class="form">
           <div class="item">
-            <input type="text" placeholder="请输入邮箱" autocomplete="off" ref="eMail">
+            <input type="text" placeholder="请输入邮箱" autocomplete="off" ref="eMail" value="">
           </div>
           <div class="item">
-            <input type="password" placeholder="请输入密码" autocomplete="off" ref="pwd">
+            <input type="password" placeholder="请输入密码" autocomplete="off" ref="pwd" value="">
           </div>
           <div class="item">
-            <input type="password" placeholder="请再次输入密码" autocomplete="off" ref="newPwd">
-          </div>
-          <div class="item">
-            <input class="u-code-it" type="text" placeholder="请输入验证码" autocomplete="off" ref="verificationCode">
-            <button class="u-code" type="button" @click="sendCode">{{ruleForm.btnText}}</button>
+            <input type="password" placeholder="请再次输入密码" autocomplete="off" ref="newPwd" value="">
           </div>
           <div class="btn">
             <button type="button" @click="submitForm('ruleForm')">注册</button>
@@ -30,15 +26,14 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import platform from './../../../router/platform' // 运营
-  // 用户登录
-  const LoginAccount = vue => {
+  // 用户注册
+  const JoinUser = vue => {
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
-        url: window.config.server + '/api/login',
+        url: window.config.server + '/api/join',
         data: {
-          username: vue.ruleForm.userName,
+          eMail: vue.ruleForm.eMail,
           password: vue.ruleForm.pwd
         },
         headers: {
@@ -91,7 +86,6 @@
         this.ruleForm.eMail = this.$refs.eMail.value
         this.ruleForm.pwd = this.$refs.pwd.value
         this.ruleForm.newPwd = this.$refs.newPwd.value
-        this.ruleForm.verificationCode = this.$refs.verificationCode.value
       },
       // 验证
       verification (callback) {
@@ -109,43 +103,19 @@
           callback()
         }
       },
-      // 发送验证码
-      sendCode () {
+      submitForm () {
         this.dataSync()
         this.verification(() => {
-          this.ruleForm.btnText = '60'
-          let text = window.setInterval(() => {
-            if (this.ruleForm.btnText > 0) {
-              this.ruleForm.btnText = Number(this.ruleForm.btnText) - 1
-            } else {
-              this.ruleForm.btnText = '发送验证码'
-              window.clearInterval(text)
-            }
-          }, 1000)
-        })
-      },
-      submitForm () {
-        // 登录用户
-        const Login = LoginAccount(this)
+          // 注册用户
+          const Join = JoinUser(this)
 
-        Login.then((resolve) => {
-          if (resolve.data.code === '200') {
-            this.$cookie.set('userId', resolve.data.data.user._id, 7)
-            this.$cookie.set('userName', resolve.data.data.user.nickname, 7)
-            this.$cookie.set('token', resolve.data.data.token, 7)
-
-            window.setTimeout(() => {
-              this.$router.addRoutes(platform)
-              this.$router.push('/')
-            }, 1)
-          } else {
-            this.$message({
-              type: 'error',
-              message: '登录失败,账号或者密码错误请重试!'
-            })
-          }
-        }).catch((reject) => {
-          window.publicFunction.error(reject, this)
+          Join.then((resolve) => {
+            if (resolve.data.code !== '200') return this.$message.warning(resolve.data.message)
+            this.$message.success('已向你的邮箱发送验证邮件，请查看邮件激活账号')
+            this.$router.push('/')
+          }).catch((reject) => {
+            window.publicFunction.error(reject, this)
+          })
         })
       },
       imgSize () {
@@ -224,11 +194,11 @@
   }
   .loginPage{
     width:490px;
-    height:485px;
+    height:420px;
     position:absolute;
     left:50%;
     top:50%;
-    margin:-242px 0 0 -245px;
+    margin:-210px 0 0 -245px;
     background:#fff;
     z-index:9;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
