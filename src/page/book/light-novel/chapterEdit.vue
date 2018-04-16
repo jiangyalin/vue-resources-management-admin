@@ -180,7 +180,6 @@
     methods: {
       onEditorChange (event) {
         this.ruleForm.content = event.html
-        console.log('event', event)
       },
       // 获取所有卷名称
       getVolume () {
