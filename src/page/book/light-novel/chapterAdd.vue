@@ -181,7 +181,7 @@
                     showCancelButton: false,
                     type: 'success'
                   }).then(() => {
-                    this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList')
+                    this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.ruleForm.book + '/chapterList/' + this.ruleForm.volume)
                   })
                 }
               }).catch((reject) => {
