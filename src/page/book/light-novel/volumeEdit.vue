@@ -30,38 +30,12 @@
         <el-form-item class="s-wh-fl" label="封面">
           <el-button @click="toggleShow">{{ruleForm.coverBtn}}</el-button>
         </el-form-item>
-        <el-form-item class="s-wh-fl" label="文件" prop="file">
-          <el-button @click="dialogFormVisible = true">{{ruleForm.filesBtn}}</el-button>
-        </el-form-item>
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </transition>
-    <el-dialog title="上传小说文件" :visible.sync="dialogFormVisible">
-      <el-upload
-        class="upload-demo"
-        :headers="headers"
-        :action="action"
-        :on-preview="handlePictureCardPreview"
-        :file-list="fileList"
-        :multiple="true"
-        :on-success="handleAvatarSuccess"
-        :on-error="handleError"
-        :limit="limit"
-        :on-remove="handleRemove">
-        <el-button
-          slot="trigger"
-          size="small"
-          type="primary">选取文件</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传txt文件，且不超过50M</div>
-      </el-upload>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="dialogFormVisible = false">取消</el-button>
-        <el-button size="mini" type="primary" @click="dialogFormVisible = false">确定</el-button>
-      </div>
-    </el-dialog>
     <my-upload
       field="img"
       @crop-upload-success="cropUploadSuccess"
@@ -151,8 +125,6 @@
           name: '', // 卷名称
           sequence: '', // 序列号
           releaseTime: this.$moment(), // 发售时间
-          filesBtn: '点击上传文件', // 文件
-          file: '', // 文件id
           coverBtn: '点击上传封面', // 封面
           cover: '' // 封面id
         },
@@ -190,9 +162,6 @@
           ],
           releaseTime: [
             { required: true, message: '请选择发售时间', trigger: 'blur' }
-          ],
-          file: [
-            { required: true, message: '请上传文件', trigger: 'blur' }
           ]
         },
         fileList: [],
@@ -214,37 +183,10 @@
       returnBtn: returnBtn
     },
     methods: {
-      imageuploaded (res) {
-        if (res.errcode === 0) {
-          this.core.src = res.data.src
-        }
-      },
-      // 上传成功
-      handleAvatarSuccess (res, file, fileList) {
-        this.ruleForm.file = file.response.data.id
-        this.ruleForm.filesBtn = file.response.data.id
-      },
-      // 上传失败
-      handleError (err, file, fileList) {
-        this.$message.error('网络错误')
-        console.log(err)
-      },
-      // 删除文件
-      handleRemove (file, fileList) {
-        console.log('file', file)
-      },
-      // 上传
-      handlePictureCardPreview (file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisible = true
-      },
-      addName () {
-        console.log(this.ruleForm)
-      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.ruleForm.file !== '' && this.ruleForm.cover !== '') {
+            if (this.ruleForm.cover !== '') {
               // 添加轻小说
               const Volume = EditVolume(this)
 
@@ -262,7 +204,7 @@
                 window.publicFunction.error(reject, this)
               })
             } else {
-              this.$message.error('请先上传文件')
+              this.$message.error('请先上传封面')
             }
           } else {
             console.log('error submit!!')

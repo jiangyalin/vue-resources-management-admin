@@ -17,7 +17,7 @@
         show-overflow-tooltip></el-table-column>
       <el-table-column fixed="right" label="操作" width="210">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="down(scope)">下载</el-button>
+          <el-button type="text" size="small" @click="down(scope)" v-if="scope.row.file !== ''">下载</el-button>
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
           <el-button type="text" size="small" @click="upload(scope)">上传</el-button>
@@ -32,6 +32,8 @@
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
     const tableData = response.data.data.content.map((data) => {
+      let file = ''
+      if (data.file) file = data.file._id
       return {
         id: data._id,
         bookName: data.book.bookName,
@@ -39,7 +41,7 @@
         volume: data.volume.name,
         sequence: data.sequence,
         releaseTime: vue.$moment(data.releaseTime).format('YYYY-MM-DD'),
-        file: data.file._id
+        file
       }
     })
     return {

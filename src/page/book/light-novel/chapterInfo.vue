@@ -56,13 +56,17 @@
       const Chapter = GetChapter(this)
 
       Chapter.then((resolve) => {
+        let file = ''
+        let text = ''
+        if (resolve.data.data.file) file = window.config.upload + resolve.data.data.file.path + resolve.data.data.file.name
+        if (resolve.data.data.file) text = resolve.data.data.file.content
         this.chapter = {
           sequence: resolve.data.data.sequence, // 序列号
           volume: resolve.data.data.volume.name, // 卷名称
           name: resolve.data.data.name, // 章名称
-          file: window.config.upload + resolve.data.data.file.path + resolve.data.data.file.name, // 文件
+          file, // 文件
           book: resolve.data.data.book.bookName, // 书
-          text: resolve.data.data.file.content
+          text
         }
         this.$refs.text.innerHTML = this.chapter.text
         this.loading = false

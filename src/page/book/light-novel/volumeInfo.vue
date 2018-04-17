@@ -57,13 +57,15 @@
       const Volume = GetVolume(this)
 
       Volume.then((resolve) => {
+        let file = ''
+        if (resolve.data.data.file) file = window.config.upload + resolve.data.data.file.path + resolve.data.data.file.name
         this.volume = {
           sequence: resolve.data.data.sequence, // 序列号
           name: resolve.data.data.name, // 卷名称
           releaseTime: resolve.data.data.releaseTime, // 发售时间
           createTime: resolve.data.data.createTime, // 更新时间
           cover: window.config.upload + resolve.data.data.cover.path + resolve.data.data.cover.name, // 封面
-          file: window.config.upload + resolve.data.data.file.path + resolve.data.data.file.name, // 文件
+          file, // 文件
           book: resolve.data.data.book.bookName // 书
         }
         this.loading = false
