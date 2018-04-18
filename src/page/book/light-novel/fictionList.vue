@@ -17,7 +17,8 @@
         show-overflow-tooltip></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <a class="el-button el-button--text el-button--small" style="text-decoration: none" :href="scope.row.file" download="w3logo">下载</a>
+          <el-button type="text" size="small" @click="down(scope)" v-if="scope.row.file !== ''">下载</el-button>
+          <!--<a class="el-button el-button&#45;&#45;text el-button&#45;&#45;small" style="text-decoration: none" :href="scope.row.file" download="w3logo">下载</a>-->
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
           <el-button type="text" size="small" @click="volume(scope)">卷</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
@@ -32,13 +33,16 @@
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
     const tableData = response.data.data.content.map((data) => {
+      let file = ''
+      if (data.file) file = data.file
       return {
         id: data._id,
         area: data.area.name,
         bookName: data.bookName,
         author: data.author,
         illustrator: data.illustrator,
-        library: data.library.name
+        library: data.library.name,
+        file
       }
     })
     return {
@@ -126,6 +130,11 @@
       }
     },
     methods: {
+      down (row) {
+        const file = row.row.file
+        console.log(file)
+        window.open(window.config.upload + '/api/download/' + file, '_self')
+      },
       view (row) {
         const id = row.row.id
         this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionInfo/' + id)
