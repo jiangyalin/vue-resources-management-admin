@@ -132,7 +132,6 @@
     methods: {
       down (row) {
         const file = row.row.file
-        console.log(file)
         window.open(window.config.upload + '/api/download/' + file, '_self')
       },
       view (row) {

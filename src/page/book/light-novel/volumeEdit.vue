@@ -252,8 +252,6 @@
             name: resolve[1].data.data.name, // 卷名称
             sequence: resolve[1].data.data.sequence, // 序列号
             releaseTime: resolve[1].data.data.releaseTime, // 发售时间
-            filesBtn: resolve[1].data.data.file._id, // 文件
-            file: resolve[1].data.data.file._id, // 文件id
             coverBtn: resolve[1].data.data.cover._id, // 封面
             cover: resolve[1].data.data.cover._id // 封面id
           }

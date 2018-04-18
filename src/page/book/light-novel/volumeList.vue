@@ -90,6 +90,24 @@
       })
     })
   }
+  // 下载纪录
+  const SetDownRecords = (vue, id, type) => {
+    return new Promise((resolve, reject) => {
+      vue.$http({
+        method: 'get',
+        url: window.config.server + '/api/basis/statistics/down/' + id + '/' + type,
+        params: {},
+        headers: {
+          'languageCode': vue.$route.params.lang,
+          'Authorization': 'Bearer ' + vue.$cookie.get('token')
+        }
+      }).then((response) => {
+        resolve(response)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+  }
   export default {
     data () {
       return {
@@ -128,6 +146,8 @@
       down (row) {
         const file = row.row.file
         window.open(window.config.upload + '/api/download/' + file, '_self')
+
+        SetDownRecords(this, row.row.id, 'volume')
       },
       view (row) {
         const id = row.row.id
