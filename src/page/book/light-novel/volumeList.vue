@@ -90,7 +90,7 @@
       })
     })
   }
-  // 下载纪录
+  // 纪录下载
   const SetDownRecords = (vue, id, type) => {
     return new Promise((resolve, reject) => {
       vue.$http({
