@@ -108,6 +108,24 @@
       })
     })
   }
+  // 纪录点击
+  const SetClickRecords = (vue, id, type) => {
+    return new Promise((resolve, reject) => {
+      vue.$http({
+        method: 'get',
+        url: window.config.server + '/api/basis/statistics/click/' + id + '/' + type,
+        params: {},
+        headers: {
+          'languageCode': vue.$route.params.lang,
+          'Authorization': 'Bearer ' + vue.$cookie.get('token')
+        }
+      }).then((response) => {
+        resolve(response)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+  }
   export default {
     data () {
       return {
@@ -152,6 +170,8 @@
       view (row) {
         const id = row.row.id
         this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.$route.params.fictionId + '/volumeInfo/' + id)
+
+        SetClickRecords(this, row.row.id, 'volume')
       },
       chapter (row) {
         const id = row.row.id

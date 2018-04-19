@@ -18,7 +18,6 @@
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="down(scope)" v-if="scope.row.file !== ''">下载</el-button>
-          <!--<a class="el-button el-button&#45;&#45;text el-button&#45;&#45;small" style="text-decoration: none" :href="scope.row.file" download="w3logo">下载</a>-->
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
           <el-button type="text" size="small" @click="volume(scope)">卷</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
@@ -109,6 +108,24 @@
       })
     })
   }
+  // 纪录点击
+  const SetClickRecords = (vue, id, type) => {
+    return new Promise((resolve, reject) => {
+      vue.$http({
+        method: 'get',
+        url: window.config.server + '/api/basis/statistics/click/' + id + '/' + type,
+        params: {},
+        headers: {
+          'languageCode': vue.$route.params.lang,
+          'Authorization': 'Bearer ' + vue.$cookie.get('token')
+        }
+      }).then((response) => {
+        resolve(response)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+  }
   export default {
     data () {
       return {
@@ -157,6 +174,8 @@
       view (row) {
         const id = row.row.id
         this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/fictionInfo/' + id)
+
+        SetClickRecords(this, row.row.id, 'book')
       },
       volume (row) {
         const id = row.row.id
