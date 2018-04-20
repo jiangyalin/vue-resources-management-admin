@@ -4,13 +4,13 @@
       <div class="loginPage">
         <div class="form">
           <div class="item">
-            <input type="text" placeholder="请输入邮箱" autocomplete="off" ref="eMail" value="">
+            <input type="text" placeholder="请输入邮箱" autocomplete="off" @keyup.enter="submitForm('ruleForm')" ref="eMail" value="">
           </div>
           <div class="item">
-            <input type="password" placeholder="请输入密码" autocomplete="off" ref="pwd" value="">
+            <input type="password" placeholder="请输入密码" autocomplete="off" @keyup.enter="submitForm('ruleForm')" ref="pwd" value="">
           </div>
           <div class="item">
-            <input type="password" placeholder="请再次输入密码" autocomplete="off" ref="newPwd" value="">
+            <input type="password" placeholder="请再次输入密码" autocomplete="off" @keyup.enter="submitForm('ruleForm')" ref="newPwd" value="">
           </div>
           <div class="btn">
             <button type="button" @click="submitForm('ruleForm')">注册</button>

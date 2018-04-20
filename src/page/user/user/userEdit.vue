@@ -243,7 +243,7 @@
       const User = GetUser(this)
 
       User.then((resolve) => {
-        const avatar = resolve.data.data.avatar !== undefined ? resolve.data.data.avatar._id : ''
+        const avatar = resolve.data.data.avatar ? resolve.data.data.avatar._id : ''
         const user = {
           id: resolve.data.data._id,
           name: resolve.data.data.name || '', // 姓名
