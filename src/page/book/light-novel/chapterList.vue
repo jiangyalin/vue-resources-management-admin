@@ -56,7 +56,7 @@
         method: 'get',
         url: window.config.server + '/api/lightNovel/chapter',
         params: {
-          id: vue.$route.params.volumeId,
+          volume: vue.$route.params.volumeId,
           pageNum: vue.formInline.currentPage - 1,
           pageSize: vue.formInline.pageSize
         },

@@ -91,11 +91,11 @@
     })
   }
   // 纪录下载
-  const SetDownRecords = (vue, id, type) => {
+  const SetDownRecords = (vue, id) => {
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
-        url: window.config.server + '/api/basis/statistics/down/' + id + '/' + type,
+        url: window.config.server + '/api/basis/statistics/down/' + id,
         params: {},
         headers: {
           'languageCode': vue.$route.params.lang,
@@ -109,11 +109,11 @@
     })
   }
   // 纪录点击
-  const SetClickRecords = (vue, id, type) => {
+  const SetClickRecords = (vue, id) => {
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
-        url: window.config.server + '/api/basis/statistics/click/' + id + '/' + type,
+        url: window.config.server + '/api/basis/statistics/click/' + id,
         params: {},
         headers: {
           'languageCode': vue.$route.params.lang,
@@ -165,13 +165,13 @@
         const file = row.row.file
         window.open(window.config.upload + '/api/download/' + file, '_self')
 
-        SetDownRecords(this, row.row.id, 'volume')
+        SetDownRecords(this, row.row.id)
       },
       view (row) {
         const id = row.row.id
         this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.$route.params.fictionId + '/volumeInfo/' + id)
 
-        SetClickRecords(this, row.row.id, 'volume')
+        SetClickRecords(this, row.row.id)
       },
       chapter (row) {
         const id = row.row.id
