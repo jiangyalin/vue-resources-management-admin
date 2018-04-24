@@ -66,7 +66,7 @@
           createTime: resolve.data.data.createTime, // 更新时间
           cover: window.config.upload + resolve.data.data.cover.path + resolve.data.data.cover.name, // 封面
           file, // 文件
-          book: resolve.data.data.book.bookName // 书
+          book: resolve.data.data.book.name // 书
         }
         this.loading = false
       }).catch((reject) => {

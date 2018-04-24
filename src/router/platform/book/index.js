@@ -1,5 +1,6 @@
 import index from '../../../components/public/main/index.vue'
 import lightNovel from './light-novel'
+import awesome from './awesome'
 
 let children = [
   {
@@ -9,10 +10,15 @@ let children = [
   {
     path: 'lightNovel',
     redirect: 'lightNovel/fictionList'
+  },
+  {
+    path: 'awesome',
+    redirect: 'awesome/awesomeList'
   }
 ]
 
 children.push(...lightNovel)
+children.push(...awesome)
 
 export default {
   path: '/:lang/book',

@@ -1,20 +1,7 @@
 <template>
   <div v-loading="loading">
-    <el-table
-      :data="tableData"
-      stripe
-      border
-      size="mini"
-      style="width: 100%"
-      tooltip-effect="dark"
-      ref="multipleTable">
-      <el-table-column
-        v-for="item in tableTile"
-        :label="item.columnLabel"
-        :prop="item.prop"
-        :key="item.key"
-        :width="item.width"
-        show-overflow-tooltip></el-table-column>
+    <el-table :data="tableData" stripe border size="mini" style="width: 100%" tooltip-effect="dark" ref="multipleTable">
+      <el-table-column v-for="item in tableTile" :label="item.columnLabel" :prop="item.prop" :key="item.key" :width="item.width" show-overflow-tooltip></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="down(scope)" v-if="scope.row.file !== ''">下载</el-button>
@@ -36,7 +23,7 @@
       if (data.file) file = data.file._id
       return {
         id: data._id,
-        bookName: data.book.bookName,
+        book: data.book.name,
         name: data.name,
         sequence: data.sequence,
         releaseTime: vue.$moment(data.releaseTime).format('YYYY-MM-DD'),
@@ -141,7 +128,7 @@
         tableTile: [{
           key: '0',
           columnLabel: '书名',
-          prop: 'bookName'
+          prop: 'book'
         }, {
           key: '1',
           columnLabel: '卷名',

@@ -46,7 +46,7 @@
         editorOption: {
           height: '500px'
         },
-        bookNameOptions: [],
+        nameOptions: [],
         volumeNameOptions: [],
         rules: {
           book: [

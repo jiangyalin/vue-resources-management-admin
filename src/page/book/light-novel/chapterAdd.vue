@@ -11,7 +11,7 @@
         <el-form-item class="s-wh-fl" label="书籍名称" prop="book">
           <el-select style="width: 100%;" v-model="ruleForm.book" @change="getVolume" filterable>
             <el-option
-              v-for="item in bookNameOptions"
+              v-for="item in nameOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -162,7 +162,7 @@
             ]
           }
         },
-        bookNameOptions: [],
+        nameOptions: [],
         volumeNameOptions: [],
         rules: {
           book: [
@@ -263,10 +263,10 @@
 
       Promise.all([FictionAllName])
         .then((resolve) => {
-          this.bookNameOptions = resolve[0].data.data.book.map(data => {
+          this.nameOptions = resolve[0].data.data.book.map(data => {
             return {
               value: data._id,
-              label: data.bookName
+              label: data.name
             }
           })
           this.loading = false

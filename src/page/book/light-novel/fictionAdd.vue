@@ -1,34 +1,19 @@
 <template>
-  <div class="m-odr"
-       v-loading="loading">
+  <div class="m-odr" v-loading="loading">
     <transition name="el-fade-in-linear">
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="80px"
-        size="mini"
-        class="demo-ruleForm">
-        <el-form-item class="s-wh-fl" label="书籍名称" prop="bookName">
-          <el-input v-model="ruleForm.bookName"></el-input>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" size="mini" class="demo-ruleForm">
+        <el-form-item class="s-wh-fl" label="书籍名称" prop="name">
+          <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <el-form-item class="s-wh-fl" label="地区" prop="area">
           <el-select style="width: 100%;" v-model="ruleForm.area">
-            <el-option
-              v-for="item in areaOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+            <el-option v-for="item in areaOptions" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item class="s-wh-fl" label="文库" prop="library">
           <el-select style="width: 100%;" v-model="ruleForm.library">
-            <el-option
-              v-for="item in libraryOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+            <el-option v-for="item in libraryOptions" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -131,7 +116,7 @@
           children: 'cities'
         },
         ruleForm: {
-          bookName: '', // 书籍名称
+          name: '', // 书籍名称
           area: '', // 地区
           library: '', // 文库
           author: '', // 作者
@@ -157,7 +142,7 @@
           noRotate: false
         },
         rules: {
-          bookName: [
+          name: [
             { required: true, message: '请输入书籍名称', trigger: 'blur' },
             { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' },
             { pattern: /\S+/, message: '不能全为空格' }

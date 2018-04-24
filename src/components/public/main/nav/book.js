@@ -1,7 +1,7 @@
 const data = (vue) => {
   return [{
     text: '轻小说',
-    name: 'book',
+    name: 'lightNovel',
     path: '/book/lightNovel',
     index: '2',
     node: [{
@@ -72,6 +72,22 @@ const data = (vue) => {
       name: 'chapterAdd',
       path: '/book/lightNovel/chapterAdd',
       index: '2-4'
+    }]
+  }, {
+    text: '这本轻小说真厉害',
+    name: 'awesome',
+    path: '/book/awesome',
+    index: '3',
+    node: [{
+      text: '轻厉列表',
+      name: 'awesomeList',
+      path: '/book/awesome/awesomeList',
+      index: '3-1'
+    }, {
+      text: '设置轻厉',
+      name: 'awesomeList',
+      path: '/book/awesome/awesomeAdd',
+      index: '3-2'
     }]
   }]
 }

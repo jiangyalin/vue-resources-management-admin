@@ -65,7 +65,7 @@
           volume: resolve.data.data.volume.name, // 卷名称
           name: resolve.data.data.name, // 章名称
           file, // 文件
-          book: resolve.data.data.book.bookName, // 书
+          book: resolve.data.data.book.name, // 书
           text
         }
         this.$refs.text.innerHTML = this.chapter.text

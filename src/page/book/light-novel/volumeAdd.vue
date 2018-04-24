@@ -11,7 +11,7 @@
         <el-form-item class="s-wh-fl" label="书籍名称" prop="book">
           <el-select style="width: 100%;" v-model="ruleForm.book" filterable>
             <el-option
-              v-for="item in bookNameOptions"
+              v-for="item in nameOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -162,7 +162,7 @@
           coverBtn: '点击上传封面', // 封面
           cover: '' // 封面id
         },
-        bookNameOptions: [],
+        nameOptions: [],
         core: {
           action: window.config.upload + '/api/upload/img',
           show: false,
@@ -313,10 +313,10 @@
           })
           this.ruleForm.library = this.libraryOptions[0].value
 
-          this.bookNameOptions = resolve[2].data.data.book.map(data => {
+          this.nameOptions = resolve[2].data.data.book.map(data => {
             return {
               value: data._id,
-              label: data.bookName
+              label: data.name
             }
           })
           this.loading = false

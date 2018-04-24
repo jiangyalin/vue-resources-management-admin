@@ -36,7 +36,7 @@
       if (data.file) file = data.file._id
       return {
         id: data._id,
-        bookName: data.book.bookName,
+        book: data.book.name,
         name: data.name,
         volume: data.volume.name,
         sequence: data.sequence,
@@ -106,7 +106,7 @@
         tableTile: [{
           key: '0',
           columnLabel: '书名',
-          prop: 'bookName'
+          prop: 'book'
         }, {
           key: '1',
           columnLabel: '卷名',

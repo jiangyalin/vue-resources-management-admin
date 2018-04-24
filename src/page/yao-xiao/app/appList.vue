@@ -1,20 +1,7 @@
 <template>
   <div v-loading="loading">
-    <el-table
-      :data="tableData"
-      stripe
-      border
-      size="mini"
-      style="width: 100%"
-      tooltip-effect="dark"
-      ref="multipleTable">
-      <el-table-column
-        v-for="item in tableTile"
-        :label="item.columnLabel"
-        :prop="item.prop"
-        :key="item.key"
-        :width="item.width"
-        show-overflow-tooltip></el-table-column>
+    <el-table :data="tableData" stripe border size="mini" style="width: 100%" tooltip-effect="dark" ref="multipleTable">
+      <el-table-column v-for="item in tableTile" :label="item.columnLabel" :prop="item.prop" :key="item.key" :width="item.width" show-overflow-tooltip></el-table-column>
       <el-table-column fixed="right" label="操作" width="140">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
@@ -30,12 +17,13 @@
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
     const tableData = response.data.data.content.map((data) => {
+      const img = data.img ? window.config.server + data.img.path + data.img.name : ''
       return {
         id: data._id,
         name: data.name,
         type: data.type,
         content: data.content,
-        img: window.config.server + data.img.path + data.img.name
+        img
       }
     })
     return {

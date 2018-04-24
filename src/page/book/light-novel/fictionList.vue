@@ -1,20 +1,7 @@
 <template>
   <div v-loading="loading">
-    <el-table
-      :data="tableData"
-      stripe
-      border
-      size="mini"
-      style="width: 100%"
-      tooltip-effect="dark"
-      ref="multipleTable">
-      <el-table-column
-        v-for="item in tableTile"
-        :label="item.columnLabel"
-        :prop="item.prop"
-        :key="item.key"
-        :width="item.width"
-        show-overflow-tooltip></el-table-column>
+    <el-table :data="tableData" stripe border size="mini" style="width: 100%" tooltip-effect="dark" ref="multipleTable">
+      <el-table-column v-for="item in tableTile" :label="item.columnLabel" :prop="item.prop" :key="item.key" :width="item.width" show-overflow-tooltip></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="down(scope)" v-if="scope.row.file !== ''">下载</el-button>
@@ -37,7 +24,7 @@
       return {
         id: data._id,
         area: data.area.name,
-        bookName: data.bookName,
+        name: data.name,
         author: data.author,
         illustrator: data.illustrator,
         library: data.library.name,
@@ -141,7 +128,7 @@
         tableTile: [{
           key: '0',
           columnLabel: '书名',
-          prop: 'bookName'
+          prop: 'name'
         }, {
           key: '1',
           columnLabel: '作者',

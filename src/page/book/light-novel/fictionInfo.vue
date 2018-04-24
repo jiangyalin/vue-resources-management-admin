@@ -1,6 +1,6 @@
 <template>
   <div class="m-odr" v-loading="loading">
-    <p>书名：{{book.bookName}}</p>
+    <p>书名：{{book.name}}</p>
     <p>地区：{{book.area}}</p>
     <p>文库：{{book.library}}</p>
     <p>作者：{{book.author}}</p>
@@ -73,7 +73,7 @@
     data () {
       return {
         book: {
-          bookName: '',
+          name: '',
           area: '',
           library: '',
           author: '',
@@ -113,7 +113,7 @@
             }
           })
           this.book = {
-            bookName: resolve[2].data.data.bookName,
+            name: resolve[2].data.data.name,
             area,
             library,
             author: resolve[2].data.data.author,

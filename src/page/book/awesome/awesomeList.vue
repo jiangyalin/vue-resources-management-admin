@@ -1,10 +1,19 @@
 <template>
   <div v-loading="loading">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
+      <el-form-item label="年/届">
+        <el-select v-model="formInline.year" :placeholder="$t('message.all')" @change="getAwesomeList">
+          <el-option v-for="item in yearOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
     <el-table :data="tableData" stripe border size="mini" style="width: 100%" tooltip-effect="dark" ref="multipleTable">
       <el-table-column v-for="item in tableTile" :label="item.columnLabel" :prop="item.prop" :key="item.key" :width="item.width" show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="130">
+      <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
+          <el-button type="text" size="small" @click="down(scope)" v-if="scope.row.file !== ''">下载</el-button>
           <el-button type="text" size="small" @click="view(scope)">查看</el-button>
+          <el-button type="text" size="small" @click="volume(scope)">卷</el-button>
           <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
           <el-button type="text" size="small" @click="remove(scope)">删除</el-button>
         </template>
@@ -17,18 +26,11 @@
 <script type="text/ecmascript-6">
   const List = (vue, response) => {
     const tableData = response.data.data.content.map((data) => {
-      let gender = ''
-      vue.genderOptions.forEach(genderOptions => {
-        if (genderOptions.value === data.gender) gender = genderOptions.label
-      })
       return {
         id: data._id,
-        name: data.name,
-        nickname: data.nickname,
-        gender: gender,
-        phone: data.phone,
-        eMail: data.eMail,
-        birthDate: vue.$moment(data.birthDate).format('YYYY-MM-DD HH:mm')
+        book: data.book.name,
+        year: data.year,
+        rank: data.rank
       }
     })
     return {
@@ -36,15 +38,16 @@
       total: response.data.data.totalElements
     }
   }
-  // 获取用户列表
-  const GetUserList = vue => {
+  // 获取轻小说列表
+  const GetAwesomeList = vue => {
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
-        url: window.config.server + '/api/user/user',
+        url: window.config.server + '/api/lightNovel/awesome',
         params: {
           pageNum: vue.formInline.currentPage - 1,
-          pageSize: vue.formInline.pageSize
+          pageSize: vue.formInline.pageSize,
+          year: vue.formInline.year
         },
         headers: {
           'languageCode': vue.$route.params.lang,
@@ -57,15 +60,12 @@
       })
     })
   }
-  // 删除用户
-  const DeleteUser = (vue, id) => {
+  // 删除轻小说
+  const DeleteAwesome = (vue, id) => {
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'delete',
-        url: window.config.server + '/api/user/user',
-        params: {
-          id
-        },
+        url: window.config.server + '/api/lightNovel/awesome/' + id,
         headers: {
           'languageCode': vue.$route.params.lang,
           'Authorization': 'Bearer ' + vue.$cookie.get('token')
@@ -78,7 +78,6 @@
     })
   }
   export default {
-    name: 'userList',
     data () {
       return {
         // 渲染筛选
@@ -87,86 +86,57 @@
         formInline: {
           total: 0,
           pageSize: 10,
-          currentPage: 1
+          currentPage: 1,
+          year: this.$moment().format('YYYY')
         },
         // 渲染表格
         tableTile: [{
           key: '0',
-          columnLabel: '姓名',
-          prop: 'name'
+          columnLabel: '书名',
+          prop: 'book'
         }, {
           key: '1',
-          columnLabel: '昵称',
-          prop: 'nickname'
+          columnLabel: '年/届',
+          prop: 'year'
         }, {
           key: '2',
-          columnLabel: '性别',
-          prop: 'gender'
-        }, {
-          key: '3',
-          columnLabel: '手机',
-          prop: 'phone'
-        }, {
-          key: '4',
-          columnLabel: '电子邮箱',
-          prop: 'eMail'
-        }, {
-          key: '5',
-          columnLabel: '出生日期',
-          prop: 'birthDate'
+          columnLabel: '名次',
+          prop: 'rank'
         }],
         // 列表数据
         tableData: [],
-        genderOptions: [{
-          value: '0',
-          label: '保密'
-        }, {
-          value: '1',
-          label: '男'
-        }, {
-          value: '2',
-          label: '女'
-        }],
+        yearOptions: [],
         loading: true
       }
     },
-    components: {},
     methods: {
-      view (row) {
-        const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/user/user/userList/userInfo/' + id)
-      },
-      edit (row) {
-        const id = row.row.id
-        this.$router.push('/' + this.$route.params.lang + '/user/user/userList/userEdit/' + id)
+      // 获取榜单列表
+      getAwesomeList () {
+        GetAwesomeList(this).then((resolve) => {
+          const list = List(this, resolve)
+          this.tableData = list.tableData
+          this.formInline.total = list.total
+          this.loading = false
+        }).catch((reject) => {
+          window.publicFunction.error(reject, this)
+        })
       },
       remove (row) {
         const id = row.row.id
-        this.$confirm('此操作将删除该用户, 是否继续?', '提示', {
+        this.$confirm('此操作将删除该轻小说, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const User = DeleteUser(this, id)
-
-          User.then((resolve) => {
+          DeleteAwesome(this, id).then((resolve) => {
             if (resolve.data.code === '200') {
               this.loading = true
               this.$message({
                 type: 'success',
                 message: '删除成功!'
               })
-              // 获取用户列表
-              const userList = GetUserList(this)
-
-              userList.then((resolve) => {
-                const list = List(this, resolve)
-                this.tableData = list.tableData
-                this.formInline.total = list.total
-                this.loading = false
-              }).catch((reject) => {
-                window.publicFunction.error(reject, this)
-              })
+              // 获取榜单列表
+              this.getAwesomeList()
             }
           }).catch((reject) => {
             window.publicFunction.error(reject, this)
@@ -182,35 +152,24 @@
       toPage (page) {
         this.loading = true
         this.formInline.currentPage = page
-        // 获取用户列表
-        const userList = GetUserList(this)
-
-        userList.then((resolve) => {
-          const list = List(this, resolve)
-          this.tableData = list.tableData
-          this.formInline.total = list.total
-          this.loading = false
-        }).catch((reject) => {
-          window.publicFunction.error(reject, this)
-        })
+        // 获取榜单列表
+        this.getAwesomeList()
       }
     },
     created: function () {
-      // 获取用户列表
-      const userList = GetUserList(this)
-
-      userList.then((resolve) => {
-        const list = List(this, resolve)
-        this.tableData = list.tableData
-        this.formInline.total = list.total
-        this.loading = false
-      }).catch((reject) => {
-        window.publicFunction.error(reject, this)
-      })
+      // 初始化年/届
+      for (let i = this.$moment().format('YYYY'); i >= 2005; i--) {
+        this.yearOptions.push({
+          label: i,
+          value: i
+        })
+      }
+      // 获取榜单列表
+      this.getAwesomeList()
     }
   }
 </script>
 
-<style scoped>
+<style>
 
 </style>
