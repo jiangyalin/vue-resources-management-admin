@@ -129,6 +129,24 @@
       })
     })
   }
+  // 验证卷
+  const VerificationVolume = vue => {
+    return new Promise((resolve, reject) => {
+      vue.$http({
+        method: 'get',
+        url: window.config.server + '/api/lightNovel/volume/verification',
+        params: vue.ruleForm,
+        headers: {
+          'languageCode': vue.$route.params.lang,
+          'Authorization': 'Bearer ' + vue.$cookie.get('token')
+        }
+      }).then((response) => {
+        resolve(response)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+  }
   export default {
     data () {
       return {
@@ -199,22 +217,43 @@
       'my-upload': myUpload
     },
     methods: {
+      addVolume () {
+        // 添加轻小说
+        AddVolume(this).then((resolve) => {
+          if (resolve.data.code === '200') {
+            this.$confirm('添加卷成功', '提示', {
+              confirmButtonText: '确定',
+              showCancelButton: false,
+              type: 'success'
+            }).then(() => {
+              this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.ruleForm.book)
+            })
+          }
+        }).catch((reject) => {
+          window.publicFunction.error(reject, this)
+        })
+      },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if (this.ruleForm.cover !== '') {
-              // 添加轻小说
-              const Volume = AddVolume(this)
-
-              Volume.then((resolve) => {
-                if (resolve.data.code === '200') {
-                  this.$confirm('添加卷成功', '提示', {
+              // 验证卷
+              VerificationVolume(this).then((resolve) => {
+                if (resolve.data.code !== '200') {
+                  const text = resolve.data.message + '，是否确认覆盖此卷'
+                  this.$confirm(text, '提示', {
                     confirmButtonText: '确定',
-                    showCancelButton: false,
                     type: 'success'
                   }).then(() => {
-                    this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList')
+                    this.addVolume()
+                  }).catch(() => {
+                    this.$message({
+                      type: 'info',
+                      message: '已取消操作'
+                    })
                   })
+                } else {
+                  this.addVolume()
                 }
               }).catch((reject) => {
                 window.publicFunction.error(reject, this)
@@ -236,7 +275,6 @@
       },
       // 封面上传成功
       cropUploadSuccess (jsonData, field) {
-        console.log('上传成功')
         this.ruleForm.cover = jsonData.data.id
         this.ruleForm.coverBtn = jsonData.data.id
       },

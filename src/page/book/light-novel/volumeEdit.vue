@@ -9,7 +9,7 @@
         size="mini"
         class="demo-ruleForm">
         <el-form-item class="s-wh-fl" label="书籍名称" prop="book">
-          <el-select style="width: 100%;" v-model="ruleForm.book" filterable>
+          <el-select style="width: 100%;" v-model="ruleForm.book" filterable disabled>
             <el-option
               v-for="item in bookNameOptions"
               :key="item.value"
@@ -22,7 +22,7 @@
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <el-form-item class="s-wh-fl" label="序列号" prop="sequence">
-          <el-input-number v-model="ruleForm.sequence" :min="1" :max="100"></el-input-number>
+          <el-input-number v-model="ruleForm.sequence" :min="1" :max="100" disabled></el-input-number>
         </el-form-item>
         <el-form-item class="s-wh-fl" label="发售时间" prop="releaseTime">
           <el-date-picker v-model="ruleForm.releaseTime" type="date"></el-date-picker>
@@ -103,7 +103,7 @@
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
-        url: window.config.server + '/api/lightNovel/volumeInfo',
+        url: window.config.server + '/api/lightNovel/volume/' + vue.$route.params.volumeId,
         data: vue.ruleForm,
         headers: {
           'languageCode': vue.$route.params.lang,
@@ -197,7 +197,7 @@
                     showCancelButton: false,
                     type: 'success'
                   }).then(() => {
-                    this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList')
+                    this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList/volumeList/' + this.ruleForm.book)
                   })
                 }
               }).catch((reject) => {
