@@ -9,12 +9,8 @@
     </el-form>
     <el-table :data="tableData" stripe border size="mini" style="width: 100%" tooltip-effect="dark" ref="multipleTable">
       <el-table-column v-for="item in tableTile" :label="item.columnLabel" :prop="item.prop" :key="item.key" :width="item.width" show-overflow-tooltip></el-table-column>
-      <el-table-column fixed="right" label="操作" width="200">
+      <el-table-column fixed="right" label="操作" width="50">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="down(scope)" v-if="scope.row.file !== ''">下载</el-button>
-          <el-button type="text" size="small" @click="view(scope)">查看</el-button>
-          <el-button type="text" size="small" @click="volume(scope)">卷</el-button>
-          <el-button type="text" size="small" @click="edit(scope)">编辑</el-button>
           <el-button type="text" size="small" @click="remove(scope)">删除</el-button>
         </template>
       </el-table-column>

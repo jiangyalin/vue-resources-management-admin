@@ -192,22 +192,26 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // 添加轻小说
-            const Fiction = AddFiction(this)
+            if (this.ruleForm.cover !== '') {
+              // 添加轻小说
+              const Fiction = AddFiction(this)
 
-            Fiction.then((resolve) => {
-              if (resolve.data.code === '200') {
-                this.$confirm('添加轻小说成功', '提示', {
-                  confirmButtonText: '确定',
-                  showCancelButton: false,
-                  type: 'success'
-                }).then(() => {
-                  this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList')
-                })
-              }
-            }).catch((reject) => {
-              window.publicFunction.error(reject, this)
-            })
+              Fiction.then((resolve) => {
+                if (resolve.data.code === '200') {
+                  this.$confirm('添加轻小说成功', '提示', {
+                    confirmButtonText: '确定',
+                    showCancelButton: false,
+                    type: 'success'
+                  }).then(() => {
+                    this.$router.push('/' + this.$route.params.lang + '/book/lightNovel/fictionList')
+                  })
+                }
+              }).catch((reject) => {
+                window.publicFunction.error(reject, this)
+              })
+            } else {
+              this.$message.error('请先上传封面')
+            }
           } else {
             console.log('error submit!!')
             return false
