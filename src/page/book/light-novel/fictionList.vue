@@ -82,7 +82,7 @@
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
-        url: window.config.server + '/api/basis/statistics/down/' + id,
+        url: window.config.server + '/api/basis/statistics/down/book/' + id,
         params: {},
         headers: {
           'languageCode': vue.$route.params.lang,
@@ -100,7 +100,7 @@
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
-        url: window.config.server + '/api/basis/statistics/click/' + id,
+        url: window.config.server + '/api/basis/statistics/click/book/' + id,
         params: {},
         headers: {
           'languageCode': vue.$route.params.lang,
