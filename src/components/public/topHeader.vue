@@ -54,6 +54,11 @@
           path: '/user',
           index: '3'
         }, {
+          text: '运营',
+          name: 'operations',
+          path: '/operations',
+          index: '5'
+        }, {
           text: '姚逍',
           name: 'yaoxiao',
           path: '/yaoxiao',

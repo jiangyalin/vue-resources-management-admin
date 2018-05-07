@@ -12,9 +12,7 @@
           <crumb :crumbs="crumb"></crumb>
           <div class="el-main">
             <div class="g-main">
-              <router-view
-                :propertyInfo="propertyInfo"
-                @propertyInfoDataTransfer="getPropertyInfoData"></router-view>
+              <router-view :propertyInfo="propertyInfo" @propertyInfoDataTransfer="getPropertyInfoData"></router-view>
             </div>
           </div>
         </el-container>

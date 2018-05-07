@@ -33,6 +33,7 @@
   import home from './nav/home'
   import book from './nav/book'
   import user from './nav/user'
+  import operations from './nav/operations'
   import yaoxiao from './nav/yaoxiao'
   // 初始化激活
   const InitActive = vue => {
@@ -104,6 +105,7 @@
       if (this.$route.path.indexOf('home') !== -1) nav = home
       if (this.$route.path.indexOf('book') !== -1) nav = book
       if (this.$route.path.indexOf('user') !== -1) nav = user
+      if (this.$route.path.indexOf('operations') !== -1) nav = operations
       if (this.$route.path.indexOf('yaoxiao') !== -1) nav = yaoxiao
 
       this.navIndex = nav.node
@@ -122,6 +124,7 @@
         if (this.$route.path.indexOf('home') !== -1) nav = home
         if (this.$route.path.indexOf('book') !== -1) nav = book
         if (this.$route.path.indexOf('user') !== -1) nav = user
+        if (this.$route.path.indexOf('operations') !== -1) nav = operations
         if (this.$route.path.indexOf('yaoxiao') !== -1) nav = yaoxiao
 
         this.navIndex = nav.node
