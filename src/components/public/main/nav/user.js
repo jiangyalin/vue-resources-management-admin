@@ -26,6 +26,22 @@ const data = (vue) => {
       path: '/user/user/userAdd',
       index: '3-2'
     }]
+  }, {
+    text: '皮肤',
+    name: 'skin',
+    path: '/user/skin',
+    index: '6',
+    node: [{
+      text: '皮肤列表',
+      name: 'skinList',
+      path: '/user/skin/skinList',
+      index: '6-1'
+    }, {
+      text: '添加皮肤',
+      name: 'skinAdd',
+      path: '/user/skin/skinAdd',
+      index: '6-2'
+    }]
   }]
 }
 

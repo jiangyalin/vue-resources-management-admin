@@ -1,5 +1,6 @@
 import index from '../../../components/public/main/index.vue'
 import user from './user'
+import skin from './skin'
 
 let children = [
   {
@@ -13,6 +14,7 @@ let children = [
 ]
 
 children.push(...user)
+children.push(...skin)
 
 export default {
   path: '/:lang/user',

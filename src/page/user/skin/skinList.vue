@@ -36,12 +36,12 @@
       total: response.data.data.totalElements
     }
   }
-  // 获取用户列表
-  const GetUserList = vue => {
+  // 获取皮肤列表
+  const GetSkinList = vue => {
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'get',
-        url: window.config.server + '/api/user/user',
+        url: window.config.server + '/api/user/skin',
         params: {
           pageNum: vue.formInline.currentPage - 1,
           pageSize: vue.formInline.pageSize
@@ -147,15 +147,17 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          DeleteUser(this, id).then((resolve) => {
+          const User = DeleteUser(this, id)
+
+          User.then((resolve) => {
             if (resolve.data.code === '200') {
               this.loading = true
               this.$message({
                 type: 'success',
                 message: '删除成功!'
               })
-              // 获取用户列表
-              GetUserList(this).then((resolve) => {
+              // 获取皮肤列表
+              GetSkinList(this).then((resolve) => {
                 const list = List(this, resolve)
                 this.tableData = list.tableData
                 this.formInline.total = list.total
@@ -178,8 +180,8 @@
       toPage (page) {
         this.loading = true
         this.formInline.currentPage = page
-        // 获取用户列表
-        GetUserList(this).then((resolve) => {
+        // 获取皮肤列表
+        GetSkinList(this).then((resolve) => {
           const list = List(this, resolve)
           this.tableData = list.tableData
           this.formInline.total = list.total
@@ -190,8 +192,8 @@
       }
     },
     created: function () {
-      // 获取用户列表
-      GetUserList(this).then((resolve) => {
+      // 获取皮肤列表
+      GetSkinList(this).then((resolve) => {
         const list = List(this, resolve)
         this.tableData = list.tableData
         this.formInline.total = list.total

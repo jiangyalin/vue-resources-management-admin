@@ -16,6 +16,7 @@ import fullCalendar from 'vue-fullcalendar'
 import VueSession from 'vue-session'
 import NzhCn from 'nzh/cn' // 数字转中文
 import quillEditor from 'vue-quill-editor'
+import jquery from 'jquery'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
@@ -32,6 +33,7 @@ Vue.use(VueSession)
 Vue.use(ElementUI)
 Object.defineProperty(Vue.prototype, '$moment', { value: moment })
 Object.defineProperty(Vue.prototype, '$NzhCn', { value: NzhCn })
+Object.defineProperty(Vue.prototype, '$jquery', { value: jquery })
 Vue.use(quillEditor, {})
 
 Object.keys(locales).forEach(function (lang) {
