@@ -13,16 +13,31 @@
         <el-form-item class="s-wh-fl" label="a背景色" prop="type_a_backgroundColor">
           <el-color-picker v-model="ruleForm.type_a_backgroundColor" show-alpha size="small"></el-color-picker>
         </el-form-item>
-        <el-form-item class="s-wh-fl" label="a阴影" prop="type_a_boxShadow">
-          <el-input v-model="ruleForm.type_a_boxShadow"></el-input>
+        <el-form-item class="s-wh-fl" label="a阴影size" prop="type_a_boxShadow_size">
+          <el-input v-model="ruleForm.type_a_boxShadow_size"></el-input>
+        </el-form-item>
+        <el-form-item class="s-wh-fl" label="a阴影色" prop="type_a_boxShadow_color">
+          <el-color-picker v-model="ruleForm.type_a_boxShadow_color" show-alpha size="small"></el-color-picker>
         </el-form-item>
         <el-form-item class="s-wh-fl" label="a背景图" prop="type_a_backgroundImage">
           <el-button @click="uploadBtn(0)">{{type_a_backgroundImage_btn}}</el-button>
-          <el-input v-model="ruleForm.type_a_backgroundImage"></el-input>
+          <el-input style="display: none" v-model="ruleForm.type_a_backgroundImage"></el-input>
+        </el-form-item>
+        <el-form-item class="s-wh-fl" label="a图大小" prop="type_a_backgroundSize">
+          <el-input-number class="s-wd-100" v-model="ruleForm.type_a_backgroundSize" :min="0" :max="10000"></el-input-number>
         </el-form-item>
         <el-form-item class="s-wh-fl" label="网页背景" prop="backgroundImage">
           <el-button @click="uploadBtn(1)">{{backgroundImage_btn}}</el-button>
-          <el-input v-model="ruleForm.backgroundImage"></el-input>
+          <el-input style="display: none" v-model="ruleForm.backgroundImage"></el-input>
+        </el-form-item>
+        <el-form-item class="s-wh-fl" label="b透明度" prop="type_b_opacity">
+          <el-input-number class="s-wd-100" v-model="ruleForm.type_b_opacity" :min="0" :max="1"></el-input-number>
+        </el-form-item>
+        <el-form-item class="s-wh-fl" label="b背景色" prop="type_b_backgroundColor">
+          <el-color-picker v-model="ruleForm.type_b_backgroundColor" show-alpha size="small"></el-color-picker>
+        </el-form-item>
+        <el-form-item class="s-wh-fl" label="b字体色" prop="type_b_fontColor">
+          <el-color-picker v-model="ruleForm.type_b_fontColor" show-alpha size="small"></el-color-picker>
         </el-form-item>
         <el-form-item style="width: 100%;float: left;">
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -55,13 +70,13 @@
 
 <script type="text/ecmascript-6">
   import CanvasAvatar from './../../../components/public/canvas-avatar/index.vue'
-  // 添加用户
-  const AddUser = vue => {
+  // 编辑皮肤
+  const EditSkin = (vue, data) => {
     return new Promise((resolve, reject) => {
       vue.$http({
         method: 'post',
-        url: window.config.server + '/api/user/user',
-        data: vue.ruleForm,
+        url: window.config.server + '/api/user/skin/' + vue.ruleForm.id,
+        data,
         headers: {
           'languageCode': vue.$route.params.lang,
           'Authorization': 'Bearer ' + vue.$cookie.get('token')
@@ -91,16 +106,53 @@
       })
     })
   }
+  // 获取皮肤详情
+  const GetSkin = vue => {
+    return new Promise((resolve, reject) => {
+      vue.$http({
+        method: 'get',
+        url: window.config.server + '/api/user/skin/' + vue.$route.params.userId,
+        params: {},
+        headers: {
+          'languageCode': vue.$route.params.lang,
+          'Authorization': 'Bearer ' + vue.$cookie.get('token')
+        }
+      }).then((response) => {
+        resolve(response)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+  }
+  // rgba 转 数组
+  const RgbaToArr = rgba => {
+    let arr = []
+    rgba = rgba.substring(rgba.indexOf('(') + 1)
+    arr.push(Number(rgba.substring(0, rgba.indexOf(','))))
+    rgba = rgba.substring(rgba.indexOf(',') + 1)
+    arr.push(Number(rgba.substring(0, rgba.indexOf(','))))
+    rgba = rgba.substring(rgba.indexOf(',') + 1)
+    arr.push(Number(rgba.substring(0, rgba.indexOf(','))))
+    rgba = rgba.substring(rgba.indexOf(',') + 1)
+    arr.push(Number(rgba.substring(0, rgba.indexOf(')'))))
+    return arr
+  }
   export default {
     name: 'userAdd',
     data () {
       return {
         ruleForm: {
+          id: '',
           user: '', // 用户
           type_a_backgroundColor: 'rgba(0, 0, 0, 0)', // 类型a盒子背景颜色raba
-          type_a_boxShadow: '', // 类型a盒子阴影 左位移，上位移，扩展，大小，rgba [0, 0, 0, 0, [0, 0, 0, 0]]
+          type_a_boxShadow_size: '', // 类型a盒子阴影大小
+          type_a_boxShadow_color: 'rgba(0, 0, 0, 0)', // 类型a盒子阴影颜色
           type_a_backgroundImage: '', // 类型a盒子背景图片
-          backgroundImage: '' // 网页背景图片
+          type_a_backgroundSize: '', // 类型a盒子背景图片大小
+          backgroundImage: '', // 网页背景图片
+          type_b_opacity: '', // 类型b盒子背景透明度
+          type_b_backgroundColor: 'rgba(0, 0, 0, 0)', // 类型b盒子背景颜色raba
+          type_b_fontColor: 'rgba(0, 0, 0, 0)' // 类型b盒子字体颜色rgba
         },
         uploadClickBtnType: 0,
         type_a_backgroundImage_btn: '点击上传a盒子背景图片',
@@ -110,19 +162,31 @@
             { required: true, message: '请选择用户', trigger: 'blur' }
           ],
           type_a_backgroundColor: [
-            { required: true, message: '请选择颜色', trigger: 'blur' }
+            { required: true, message: '请选择a盒子背景颜色', trigger: 'blur' }
           ],
-          type_a_boxShadow: [
-            { required: true, message: '填写阴影值', trigger: 'blur' }
+          type_a_boxShadow_size: [
+            { required: true, message: '填写a盒子阴影大小如0，0，0，0', trigger: 'blur' }
+          ],
+          type_a_boxShadow_color: [
+            { required: true, message: '请选择a盒子阴影颜色', trigger: 'blur' }
           ],
           type_a_backgroundImage: [
-            { required: true, message: '请选择图片', trigger: 'blur' }
+            { required: true, message: '请选择a盒子背景图片', trigger: 'blur' }
           ],
           backgroundImage: [
-            { required: true, message: '请选择图片', trigger: 'blur' }
+            { required: true, message: '请选择网页背景图片', trigger: 'blur' }
           ],
-          birthDate: [
-            { required: true, message: '请选择出生日期', trigger: 'blur' }
+          type_a_backgroundSize: [
+            { required: true, message: '请输入a背景图片大小', trigger: 'blur' }
+          ],
+          type_b_opacity: [
+            { required: true, message: '请输入b盒子背景透明度', trigger: 'blur' }
+          ],
+          type_b_backgroundColor: [
+            { required: true, message: '请输入b盒子背景颜色', trigger: 'blur' }
+          ],
+          type_b_fontColor: [
+            { required: true, message: '请输入b盒子字体颜色', trigger: 'blur' }
           ]
         },
         upload: {
@@ -182,21 +246,22 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.ruleForm.avatar === '') {
-              this.ruleForm = {
-                name: this.ruleForm.name, // 姓名
-                nickname: this.ruleForm.nickname, // 昵称
-                gender: this.ruleForm.gender, // 性别
-                phone: this.ruleForm.phone, // 手机
-                eMail: this.ruleForm.eMail, // 电子邮箱
-                birthDate: this.$moment() // 出生日期
-              }
+            let boxShadow = this.ruleForm.type_a_boxShadow_size.split(',')
+            boxShadow.push(RgbaToArr(this.ruleForm.type_a_boxShadow_color))
+            const skin = {
+              user: this.ruleForm.user, // 用户
+              type_a_backgroundColor: RgbaToArr(this.ruleForm.type_a_backgroundColor), // 类型a盒子背景颜色raba
+              type_a_boxShadow: boxShadow, // 类型a盒子阴影 左位移，上位移，扩展，大小，rgba [0, 1, 0, 2, [0, 0, 0, 0.1]]
+              type_a_backgroundImage: this.ruleForm.type_a_backgroundImage, // 类型a盒子背景图片
+              type_a_backgroundSize: this.ruleForm.type_a_backgroundSize, // 类型a盒子背景图片大小
+              backgroundImage: this.ruleForm.backgroundImage, // 网页背景图片
+              type_b_opacity: this.ruleForm.type_b_opacity, // 类型b盒子背景透明度
+              type_b_backgroundColor: RgbaToArr(this.ruleForm.type_b_backgroundColor), // 类型b盒子背景颜色raba
+              type_b_fontColor: RgbaToArr(this.ruleForm.type_b_fontColor)// 类型b盒子字体颜色rgba
             }
-            const User = AddUser(this)
-
-            User.then((resolve) => {
+            EditSkin(this, skin).then((resolve) => {
               if (resolve.data.code === '200') {
-                this.$confirm('添加用户成功', '提示', {
+                this.$confirm('编辑皮肤成功', '提示', {
                   confirmButtonText: '确定',
                   showCancelButton: false,
                   type: 'success'
@@ -229,6 +294,26 @@
               name: data.name
             }
           })
+        }).catch(reject => {
+          window.publicFunction.error(reject, this)
+        })
+
+        GetSkin(this).then(resolve => {
+          this.ruleForm = {
+            id: resolve.data.data._id,
+            user: resolve.data.data.user, // 用户
+            type_a_backgroundColor: 'rgba(' + resolve.data.data.type_a_backgroundColor.join(',') + ')', // 类型a盒子背景颜色raba
+            type_a_boxShadow_size: resolve.data.data.type_a_boxShadow[0] + ',' + resolve.data.data.type_a_boxShadow[1] + ',' + resolve.data.data.type_a_boxShadow[2] + ',' + resolve.data.data.type_a_boxShadow[3], // 类型a盒子阴影大小
+            type_a_boxShadow_color: 'rgba(' + resolve.data.data.type_a_boxShadow[4].join(',') + ')', // 类型a盒子阴影颜色
+            type_a_backgroundImage: resolve.data.data.type_a_backgroundImage, // 类型a盒子背景图片
+            type_a_backgroundSize: resolve.data.data.type_a_backgroundSize, // 类型a盒子背景图片大小
+            backgroundImage: resolve.data.data.backgroundImage, // 网页背景图片
+            type_b_opacity: resolve.data.data.type_b_opacity, // 类型b盒子背景透明度
+            type_b_backgroundColor: 'rgba(' + resolve.data.data.type_b_backgroundColor.join(',') + ')', // 类型b盒子背景颜色raba
+            type_b_fontColor: 'rgba(' + resolve.data.data.type_b_fontColor.join(',') + ')' // 类型b盒子字体颜色rgba
+          }
+          this.type_a_backgroundImage_btn = resolve.data.data.type_a_backgroundImage || '点击上传a盒子背景图片'
+          this.backgroundImage_btn = resolve.data.data.backgroundImage || '点击上传网页背景图片'
         }).catch(reject => {
           window.publicFunction.error(reject, this)
         })
